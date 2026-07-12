@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>大專運動聯網平台 - 網頁版</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Alpine.js CDN -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
         tailwind.config = {
@@ -32,9 +29,6 @@
 <body class="bg-slate-950 text-gray-100 min-h-screen font-sans antialiased selection:bg-emerald-500 selection:text-white" 
       x-data="appState()" x-init="initApp()">
 
-    <!-- ========================================== -->
-    <!-- 🔑 1. 登入介面 (Login View) -->
-    <!-- ========================================== -->
     <div x-show="currentView === 'login'" x-cloak class="min-h-screen flex flex-col justify-center items-center px-6 bg-slate-950">
         <div class="w-full max-w-md bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-xl space-y-6 text-center">
             <div class="mx-auto w-20 h-20 bg-slate-800 rounded-2xl flex items-center justify-center text-emerald-500 text-4xl shadow-inner border border-slate-700">
@@ -76,9 +70,6 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- 📝 2. 註冊介面 (Register View) -->
-    <!-- ========================================== -->
     <div x-show="currentView === 'register'" x-cloak class="min-h-screen flex flex-col justify-center items-center px-6 py-12 bg-slate-950">
         <div class="w-full max-w-lg bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-xl space-y-6">
             <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
@@ -138,9 +129,6 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- 📱 3. 一般會員主導航介面 (⚡已修正為正確的路由綁定) -->
-    <!-- ========================================== -->
     <div x-show="currentView === 'main'" x-cloak class="min-h-screen flex flex-col">
         <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-40 shadow-md">
             <div class="flex items-center space-x-2">
@@ -156,7 +144,6 @@
         </header>
 
         <main class="flex-1 pb-24 max-w-5xl w-full mx-auto p-6">
-            <!-- 🏠 頁面 A：首頁項目大廳 (Home Tab) -->
             <div x-show="currentTab === 'home'" class="space-y-8">
                 <div class="text-center py-4">
                     <h2 class="text-2xl font-bold">大專院校綜合體育媒合平台</h2>
@@ -187,7 +174,6 @@
                     </template>
                 </div>
 
-                <!-- 💡 運動項目提議看板 -->
                 <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4 shadow-lg">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                         <div class="flex items-center space-x-2">
@@ -226,7 +212,6 @@
                 </div>
             </div>
 
-            <!-- 📅 頁面 B：我的預約分頁 -->
             <div x-show="currentTab === 'myBookings'" class="space-y-6">
                 <h2 class="text-xl font-bold border-b border-slate-800 pb-3 flex items-center space-x-2">
                     <i class="fa-solid fa-calendar-check text-emerald-500"></i>
@@ -259,7 +244,7 @@
                                 </div>
                                 <button @click="openChatRoom(item)" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors flex items-center space-x-1.5">
                                     <i class="fa-regular fa-comment-dots"></i>
-                                    <span>💬 進入對話</span>
+                                    <span>進入對話</span>
                                 </button>
                             </div>
                         </template>
@@ -267,7 +252,6 @@
                 </div>
             </div>
 
-            <!-- 👤 頁面 C：個人設定 -->
             <div x-show="currentTab === 'profile'" class="max-w-xl mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6 shadow-lg">
                 <h2 class="text-lg font-bold border-b border-slate-800 pb-3"><i class="fa-solid fa-user-gear text-emerald-500 mr-2"></i>個人帳號雲端設定</h2>
                 
@@ -319,9 +303,6 @@
         </nav>
     </div>
 
-    <!-- ========================================== -->
-    <!-- 🏸 4. 通用運動大廳彈窗視圖 (Lounge View) -->
-    <!-- ========================================== -->
     <div x-show="currentView === 'lounge'" x-cloak class="min-h-screen bg-slate-950 flex flex-col">
         <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center sticky top-0 z-40">
             <button @click="currentView = 'main'; currentTab = 'home'" class="text-gray-400 hover:text-white mr-4">
@@ -401,9 +382,6 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- 💬 5. 加密對話視圖 (Chat View) -->
-    <!-- ========================================== -->
     <div x-show="currentView === 'chat'" x-cloak class="min-h-screen bg-slate-950 flex flex-col max-w-2xl mx-auto border-x border-slate-800">
         <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
             <div class="flex items-center">
@@ -446,9 +424,6 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- 👑 6. 系統總管理員控制台 (Admin Central Hub) -->
-    <!-- ========================================== -->
     <div x-show="currentView === 'admin'" x-cloak class="min-h-screen flex flex-col bg-slate-950">
         <header class="bg-red-950/20 border-b border-red-900/30 px-6 py-4 flex items-center justify-between sticky top-0 z-50">
             <div class="flex items-center space-x-2">
@@ -481,7 +456,6 @@
                     </button>
                 </div>
 
-                <!-- A. 管理員預約 -->
                 <div x-show="adminTab === 'bookings'" class="overflow-x-auto">
                     <table class="w-full text-xs text-left border-collapse">
                         <thead>
@@ -517,7 +491,6 @@
                     </table>
                 </div>
 
-                <!-- B. 管理員對話 -->
                 <div x-show="adminTab === 'messages'" class="space-y-3 max-h-[500px] overflow-y-auto no-scrollbar">
                     <template x-for="msg in adminMessages" :key="msg._id">
                         <div class="p-3 bg-slate-950/50 border border-slate-800 rounded-xl space-y-1.5 text-xs">
@@ -530,7 +503,6 @@
                     </template>
                 </div>
 
-                <!-- C. 管理員投訴 -->
                 <div x-show="adminTab === 'complaints'" class="space-y-4 max-h-[500px] overflow-y-auto no-scrollbar">
                     <template x-for="comp in adminComplaints" :key="comp._id">
                         <div class="p-4 bg-red-950/10 border border-red-900/20 rounded-xl space-y-2 text-xs">
@@ -550,7 +522,6 @@
         </div>
     </div>
 
-    <!-- 🚨 舉報 Modal -->
     <div x-show="isShowingComplaintModal" x-cloak class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-6 space-y-4">
             <div class="flex items-center space-x-2 text-red-400 border-b border-slate-800 pb-2">
@@ -580,7 +551,6 @@
         </div>
     </div>
 
-    <!-- 🤝 媒合 Modal -->
     <div x-show="isShowingMatchModal" x-cloak class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-2xl p-6 space-y-4 text-center">
             <h3 class="font-bold text-md text-gray-100">🤝 搓合扣費風險確認</h3>
@@ -594,9 +564,6 @@
         </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- ⚙️ JavaScript 核心驅動引擎 -->
-    <!-- ========================================== -->
     <script>
         async function fetchFromGoogle(payload) {
             let response = await fetch(Config.googleSheetsAPIURL, {
@@ -634,6 +601,34 @@
                 newPassword: '', confirmPassword: '',
 
                 initApp() {},
+
+                // ⚡已修復：完美的圖示物件宣告，清除左側方塊空白 Bug
+                getSportIcon(key) {
+                    const icons = {
+                        badminton: "🏸",
+                        golf: "⛳",
+                        basketball: "🏀",
+                        pickleball: "🥎",
+                        volleyball: "🏐",
+                        tableTennis: "🏓",
+                        tennis: "🎾",
+                        swimming: "🏊"
+                    };
+                    return icons[key] ?? "🎯";
+                },
+
+                detectUserType() {
+                    let email = this.regEmail.toLowerCase().trim();
+                    if(!email) { this.detectionText = '請輸入電郵，系統將自動分析域名...'; return; }
+                    if (email.endsWith('.edu.hk') || email.endsWith('.edu')) {
+                        this.detectedType = email.includes('alumni') ? 'alumni' : 'student';
+                        this.detectedInstitution = email.includes('hku') ? '香港大學' : email.includes('cuhk') ? '香港中文大學' : '大專院校聯網';
+                        this.detectionText = `💡 智能判定：[${this.detectedInstitution}] ${this.detectedType === 'student' ? '在校生' : '校友'}身份。`;
+                    } else {
+                        this.detectedType = 'public'; this.detectedInstitution = '無（公眾）';
+                        this.detectionText = 'ℹ️ 一般網域（如 Gmail），將劃分為 [公眾會員]。';
+                    }
+                },
 
                 async loginAction() {
                     if(!this.loginEmail || !this.loginPassword) { this.errorMessage = '⚠️ 請填寫完整登入資訊'; return; }
@@ -690,10 +685,10 @@
                     if(this.isSportUnlocked(sport.key)) { await this.loadLoungeBookings(); }
                 },
 
+                // ⚡已優化：全面走安全簡單 POST 管道載入大廳
                 async loadLoungeBookings() {
                     try {
-                        let res = await fetch(`${Config.googleSheetsAPIURL}?action=getBookings&sport=${this.activeSport.key}`);
-                        let data = await res.json();
+                        let data = await fetchFromGoogle({ action: 'getBookings', sport: this.activeSport.key });
                         if(data.success) { this.loungeBookings = data.items || []; }
                     } catch(e) {}
                 },
@@ -727,18 +722,18 @@
                     } catch(e) { alert("配對連線失敗"); }
                 },
 
+                // ⚡已優化：全面走安全簡單 POST 管道載入我的行程表
                 async loadMyMatchedBookings() {
                     if(!this.currentUser) return;
                     try {
-                        let res = await fetch(`${Config.googleSheetsAPIURL}?action=getMyMatchedBookings&email=${this.currentUser.fieldName}`);
-                        let data = await res.json();
+                        let data = await fetchFromGoogle({ action: 'getMyMatchedBookings', email: this.currentUser.fieldName });
                         if(data.success) { this.matchedBookings = data.items || []; }
                     } catch(e) {}
                 },
 
                 async openChatRoom(booking) {
                     this.activeChatBooking = booking; 
-                    this.currentView = 'chat'; // ⚡ 路由立即切換，主畫面隨即關閉，完美消除重疊遮擋
+                    this.currentView = 'chat'; 
                     await this.syncMessages();
                     this.chatTimer = setInterval(() => { this.syncMessages(); }, 3000);
                 },
@@ -748,11 +743,11 @@
                     this.currentView = 'main'; this.currentTab = 'myBookings';
                 },
 
+                // ⚡已優化：全面走安全簡單 POST 管道輪詢同步聊天訊息
                 async syncMessages() {
                     if(!this.activeChatBooking) return;
                     try {
-                        let res = await fetch(`${Config.googleSheetsAPIURL}?action=getMessages&bookingId=${this.activeChatBooking._id}`);
-                        let data = await res.json();
+                        let data = await fetchFromGoogle({ action: 'getMessages', bookingId: this.activeChatBooking._id });
                         if(data.success) { 
                             this.chatMessagesList = data.items || []; 
                             setTimeout(() => {
@@ -791,10 +786,10 @@
                     this.isComplaintSubmitting = false;
                 },
 
+                // ⚡已優化：全面走安全簡單 POST 管道載入熱度提議
                 async fetchSuggestions() {
                     try {
-                        let res = await fetch(`${Config.googleSheetsAPIURL}?action=getSuggestions`);
-                        let data = await res.json();
+                        let data = await fetchFromGoogle({ action: 'getSuggestions' });
                         if(data.success) { this.suggestionsList = (data.items || []).sort((a,b) => b.count - a.count); }
                     } catch(e) {}
                 },
@@ -810,10 +805,10 @@
                     } catch(e) { alert("修改失敗"); }
                 },
 
+                // ⚡已優化：全面走安全簡單 POST 管道拉取管理員控制中心
                 async loadAdminDataPackage() {
                     try {
-                        let res = await fetch(`${Config.googleSheetsAPIURL}?action=adminGetAllData`);
-                        let data = await res.json();
+                        let data = await fetchFromGoogle({ action: 'adminGetAllData' });
                         if(data.success) {
                             this.adminBookings = data.bookings || [];
                             this.adminMessages = data.messages || [];
