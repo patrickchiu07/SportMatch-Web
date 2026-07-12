@@ -565,7 +565,11 @@
     </div>
 
     <script>
-        // ⚡ 終極探針：強制捕獲 Google 內部崩潰的真面目
+        // ⚡ 核心修正 1：完美補上網頁前端漏掉的 Config 連線網址配置區
+        const Config = {
+            googleSheetsAPIURL: "https://script.google.com/macros/s/AKfycbyEZFlnMIru9gpcQlWwm533AuAkui7W5BvbcBr1LFez2pLJ1NlRWuKty-Hzz0F5PfEl9Q/exec"
+        };
+
         async function fetchFromGoogle(payload) {
             let response = await fetch(Config.googleSheetsAPIURL, {
                 method: 'POST',
@@ -573,14 +577,12 @@
                 body: JSON.stringify(payload)
             });
             
-            // 先以純文字提取封包
             const rawText = await response.text();
             try {
-                // 嘗試將文字解析為 JSON
                 return JSON.parse(rawText);
             } catch(err) {
-                // 🔬 核心防禦：如果 Google 吐回的是 HTML 錯誤網頁，直接在瀏覽器控制台完整印出來！
-                console.error("🚨 【真兇現形】Google 後台並未回傳 JSON，其原始錯誤網頁內容如下：\n", rawText);
+                // 🔬 探針診斷日誌：如果 Google 後端程式碼有任何報錯網頁，將在控制台毫無保留直接印出
+                console.error("🚨 【真兇現形】Google 後端並未回傳 JSON，其原始錯誤網頁內容如下：\n", rawText);
                 throw new Error("Google後端服務器指令碼崩潰");
             }
         }
@@ -613,17 +615,10 @@
 
                 initApp() {},
 
-                // ⚡已完美換裝：標準大括號物件字面量，徹底修復左側圖示空白問題
                 getSportIcon(key) {
                     const icons = {
-                        badminton: "🏸",
-                        golf: "⛳",
-                        basketball: "🏀",
-                        pickleball: "🥎",
-                        volleyball: "🏐",
-                        tableTennis: "🏓",
-                        tennis: "🎾",
-                        swimming: "🏊"
+                        badminton: "🏸", golf: "⛳", basketball: "🏀", pickleball: "🥎",
+                        volleyball: "🏐", tableTennis: "🏓", tennis: "🎾", swimming: "🏊"
                     };
                     return icons[key] ?? "🎯";
                 },
@@ -659,6 +654,8 @@
                             }
                         } else { this.errorMessage = res.message || '帳號或密碼錯誤'; }
                     } catch(e) { 
+                        // ⚡ 核心優化 2：捕獲底層運行錯誤並完整印出，拒絕盲目吃掉資訊
+                        console.error("🚨 登入程序發生底層攔截錯誤：", e);
                         this.errorMessage = '雲端連線失敗，請稍後再試。'; 
                     }
                     this.isLoading = false;
@@ -675,7 +672,7 @@
                             alert("🎉 註冊成功，帳號資料已安全同步至 Google 試算表！");
                             this.currentView = 'login';
                         } else { alert("🚨 註冊失敗: " + res.message); }
-                    } catch(e) { alert("連線超時。"); }
+                    } catch(e) { console.error(e); alert("連線超時。"); }
                     this.isLoading = false;
                 },
 
