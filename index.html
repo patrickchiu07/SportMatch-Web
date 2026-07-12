@@ -565,13 +565,24 @@
     </div>
 
     <script>
+        // ⚡ 終極探針：強制捕獲 Google 內部崩潰的真面目
         async function fetchFromGoogle(payload) {
             let response = await fetch(Config.googleSheetsAPIURL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify(payload)
             });
-            return await response.json();
+            
+            // 先以純文字提取封包
+            const rawText = await response.text();
+            try {
+                // 嘗試將文字解析為 JSON
+                return JSON.parse(rawText);
+            } catch(err) {
+                // 🔬 核心防禦：如果 Google 吐回的是 HTML 錯誤網頁，直接在瀏覽器控制台完整印出來！
+                console.error("🚨 【真兇現形】Google 後台並未回傳 JSON，其原始錯誤網頁內容如下：\n", rawText);
+                throw new Error("Google後端服務器指令碼崩潰");
+            }
         }
 
         function appState() {
@@ -602,7 +613,7 @@
 
                 initApp() {},
 
-                // ⚡已修復：完美的圖示物件宣告，清除左側方塊空白 Bug
+                // ⚡已完美換裝：標準大括號物件字面量，徹底修復左側圖示空白問題
                 getSportIcon(key) {
                     const icons = {
                         badminton: "🏸",
@@ -647,7 +658,9 @@
                                 await this.loadMyMatchedBookings();
                             }
                         } else { this.errorMessage = res.message || '帳號或密碼錯誤'; }
-                    } catch(e) { this.errorMessage = '雲端連線失敗，請稍後再試。'; }
+                    } catch(e) { 
+                        this.errorMessage = '雲端連線失敗，請稍後再試。'; 
+                    }
                     this.isLoading = false;
                 },
 
@@ -685,7 +698,6 @@
                     if(this.isSportUnlocked(sport.key)) { await this.loadLoungeBookings(); }
                 },
 
-                // ⚡已優化：全面走安全簡單 POST 管道載入大廳
                 async loadLoungeBookings() {
                     try {
                         let data = await fetchFromGoogle({ action: 'getBookings', sport: this.activeSport.key });
@@ -722,7 +734,6 @@
                     } catch(e) { alert("配對連線失敗"); }
                 },
 
-                // ⚡已優化：全面走安全簡單 POST 管道載入我的行程表
                 async loadMyMatchedBookings() {
                     if(!this.currentUser) return;
                     try {
@@ -743,7 +754,6 @@
                     this.currentView = 'main'; this.currentTab = 'myBookings';
                 },
 
-                // ⚡已優化：全面走安全簡單 POST 管道輪詢同步聊天訊息
                 async syncMessages() {
                     if(!this.activeChatBooking) return;
                     try {
@@ -786,7 +796,6 @@
                     this.isComplaintSubmitting = false;
                 },
 
-                // ⚡已優化：全面走安全簡單 POST 管道載入熱度提議
                 async fetchSuggestions() {
                     try {
                         let data = await fetchFromGoogle({ action: 'getSuggestions' });
@@ -805,7 +814,6 @@
                     } catch(e) { alert("修改失敗"); }
                 },
 
-                // ⚡已優化：全面走安全簡單 POST 管道拉取管理員控制中心
                 async loadAdminDataPackage() {
                     try {
                         let data = await fetchFromGoogle({ action: 'adminGetAllData' });
