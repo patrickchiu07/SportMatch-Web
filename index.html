@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>大專運動聯網平台 - 網頁版</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Alpine.js CDN -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
         tailwind.config = {
@@ -29,6 +32,9 @@
 <body class="bg-slate-950 text-gray-100 min-h-screen font-sans antialiased selection:bg-emerald-500 selection:text-white" 
       x-data="appState()" x-init="initApp()">
 
+    <!-- ========================================== -->
+    <!-- 🔑 1. 登入介面 (Login View) -->
+    <!-- ========================================== -->
     <div x-show="currentView === 'login'" x-cloak class="min-h-screen flex flex-col justify-center items-center px-6 bg-slate-950">
         <div class="w-full max-w-md bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-xl space-y-6 text-center">
             <div class="mx-auto w-20 h-20 bg-slate-800 rounded-2xl flex items-center justify-center text-emerald-500 text-4xl shadow-inner border border-slate-700">
@@ -36,19 +42,19 @@
             </div>
             <div>
                 <h1 class="text-2xl font-bold tracking-tight">大專運動聯網平台</h1>
-                <p class="text-xs text-gray-400 mt-2">安全託管中心防禦 ｜ 數據連接 Google 試算表</p>
+                <p class="text-xs text-gray-400 mt-2">完全免費社群媒合 ｜ 數據連接 Google 試算表</p>
             </div>
 
             <div class="space-y-4 text-left">
                 <div>
                     <label class="block text-xs font-semibold text-gray-400 mb-1">登記電郵 / 學校電郵</label>
                     <input type="email" x-model="loginEmail" placeholder="example@hku.hk" 
-                           class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors">
+                           class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors text-white">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-400 mb-1">密碼</label>
                     <input type="password" x-model="loginPassword" placeholder="輸入密碼" 
-                           class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors">
+                           class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors text-white">
                 </div>
             </div>
 
@@ -64,12 +70,15 @@
 
             <div class="pt-2">
                 <button @click="currentView = 'register'; errorMessage = ''" class="text-xs text-emerald-500 hover:underline">
-                    建立新帳戶 (安全託管流程)
+                    建立新帳戶
                 </button>
             </div>
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- 📝 2. 註冊介面 (Register View) -->
+    <!-- ========================================== -->
     <div x-show="currentView === 'register'" x-cloak class="min-h-screen flex flex-col justify-center items-center px-6 py-12 bg-slate-950">
         <div class="w-full max-w-lg bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-xl space-y-6">
             <div class="flex items-center space-x-3 border-b border-slate-800 pb-4">
@@ -78,7 +87,7 @@
                 </button>
                 <div>
                     <h2 class="text-xl font-bold">建立新平台帳戶</h2>
-                    <p class="text-xs text-gray-400">系統學籍分析判定成功後將同步寫入雲端</p>
+                    <p class="text-xs text-gray-400">免費加入大專運動社交圈</p>
                 </div>
             </div>
 
@@ -86,17 +95,17 @@
                 <div>
                     <label class="block text-xs font-semibold text-gray-400 mb-1">用戶名稱 / 暱稱</label>
                     <input type="text" x-model="regName" placeholder="例如：陳同學" 
-                           class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors">
+                           class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors text-white">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-400 mb-1">電子郵件</label>
                     <input type="email" x-model="regEmail" @input="detectUserType()" placeholder="student@hku.hk" 
-                           class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors">
+                           class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors text-white">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-400 mb-1">設定密碼</label>
                     <input type="password" x-model="regPassword" placeholder="設定登入密碼" 
-                           class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors">
+                           class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 transition-colors text-white">
                 </div>
 
                 <div class="bg-slate-800/50 border border-slate-800 rounded-xl p-4 space-y-1">
@@ -110,14 +119,14 @@
                 <div class="bg-red-950/20 border border-red-900/30 rounded-xl p-4 space-y-2">
                     <div class="text-xs font-bold text-red-400 flex items-center space-x-1.5">
                         <i class="fa-solid fa-triangle-exclamation"></i>
-                        <span>平台重要法律免責聲明（重要）</span>
+                        <span>平台重要法律免責聲明</span>
                     </div>
                     <p class="text-[11px] text-gray-400 leading-relaxed">
-                        本平台為「完全免費」之校園與公眾體育媒合空間。用家於此進行的所有行為皆屬個人自發社交。本平台對於任何因約戰、配對或線下見面引發之【人身安全、意外傷亡、個人品行、財產損失】或任何【金錢與經濟糾紛】，概不承擔任何直接、間接或連帶之法律民刑事責任。
+                        本平台為「完全免費」之校園與公眾體育媒合空間。用家於此進行的所有行為皆屬個人自發社交。本平台對於任何因約戰或線下見面引發之【人身安全、意外傷亡、財產損失】，概不承擔法律責任。
                     </p>
                     <label class="flex items-start space-x-2 pt-2 cursor-pointer">
                         <input type="checkbox" x-model="agreeToTerms" class="mt-0.5 rounded border-slate-700 text-emerald-500 focus:ring-emerald-500 bg-slate-800">
-                        <span class="text-xs font-semibold text-gray-200">我已詳細閱讀、理解並完全同意上述所有法律免責責任條款。</span>
+                        <span class="text-xs font-semibold text-gray-200">我已詳細閱讀、理解並完全同意上述免責條款。</span>
                     </label>
                 </div>
             </div>
@@ -129,6 +138,9 @@
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- 📱 3. 一般會員主導航介面 -->
+    <!-- ========================================== -->
     <div x-show="currentView === 'main'" x-cloak class="min-h-screen flex flex-col">
         <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center justify-between sticky top-0 z-40 shadow-md">
             <div class="flex items-center space-x-2">
@@ -144,10 +156,11 @@
         </header>
 
         <main class="flex-1 pb-24 max-w-5xl w-full mx-auto p-6">
+            <!-- 🏠 頁面 A：首頁項目大廳 (Home Tab) -->
             <div x-show="currentTab === 'home'" class="space-y-8">
                 <div class="text-center py-4">
                     <h2 class="text-2xl font-bold">大專院校綜合體育媒合平台</h2>
-                    <p class="text-xs text-gray-400 mt-1">數據核心已完美裝載至 Google 試算表 CMS 雲端庫</p>
+                    <p class="text-xs text-gray-400 mt-1">完全免費 ｜ 自由約戰 ｜ 自訂人數限制</p>
                 </div>
 
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -155,10 +168,6 @@
                         <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow transition-transform hover:scale-[1.02] flex flex-col">
                             <div :class="sport.bg" class="h-24 flex items-center justify-center text-4xl text-white shadow-inner relative">
                                 <span x-text="sport.icon"></span>
-                                <span class="absolute top-2 right-2 text-[9px] font-bold px-2 py-0.5 rounded-full"
-                                      :class="isSportUnlocked(sport.key) ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-amber-500/20 text-amber-400 border border-amber-500/30'">
-                                    <span x-text="isSportUnlocked(sport.key) ? '已開通' : '未開通'"></span>
-                                </span>
                             </div>
                             <div class="p-4 flex-1 flex flex-col justify-between space-y-3">
                                 <div>
@@ -174,6 +183,7 @@
                     </template>
                 </div>
 
+                <!-- 💡 運動項目提議看板 -->
                 <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4 shadow-lg">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                         <div class="flex items-center space-x-2">
@@ -184,13 +194,10 @@
                             <i class="fa-solid fa-arrows-rotate"></i> <span>刷新名單</span>
                         </button>
                     </div>
-                    <p class="text-[11px] text-gray-400 leading-relaxed">
-                        *當下方某一項運動提議累積達到一定數目後，管理員將在試算表後台正式為大家上架全新大廳！
-                    </p>
 
                     <div class="flex gap-2">
                         <input type="text" x-model="newSportSuggestion" placeholder="輸入您提議的運動（例：壁球）"
-                               class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500">
+                               class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 text-white">
                         <button @click="submitSuggestionAction()" :disabled="!newSportSuggestion.trim() || isSubmitting"
                                 class="bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-800 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors">
                             <span x-text="isSubmitting ? '提交中...' : '提議'"></span>
@@ -212,6 +219,7 @@
                 </div>
             </div>
 
+            <!-- 📅 頁面 B：我的預約分頁 -->
             <div x-show="currentTab === 'myBookings'" class="space-y-6">
                 <h2 class="text-xl font-bold border-b border-slate-800 pb-3 flex items-center space-x-2">
                     <i class="fa-solid fa-calendar-check text-emerald-500"></i>
@@ -220,7 +228,7 @@
 
                 <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-lg">
                     <div class="p-4 bg-slate-900/50 border-b border-slate-800 flex justify-between items-center">
-                        <span class="text-xs text-gray-400">已媒合成功的歷史與當前對話清單</span>
+                        <span class="text-xs text-gray-400">您發起與參加的運動約局清單</span>
                         <button @click="loadMyMatchedBookings()" class="text-xs text-emerald-500 hover:underline">
                             <i class="fa-solid fa-rotate mr-1"></i>手動刷新
                         </button>
@@ -234,8 +242,11 @@
                                          x-text="getSportIcon(item.sportType)"></div>
                                     <div class="space-y-1">
                                         <div class="flex items-center space-x-2">
-                                            <span class="font-bold text-sm" x-text="item.hostName + ' 的運動約約'"></span>
-                                            <span class="text-[9px] font-bold bg-green-500/20 text-green-400 border border-green-500/30 px-2 py-0.5 rounded-full">🤝 已成單</span>
+                                            <span class="font-bold text-sm" x-text="item.hostName + ' 的約戰局'"></span>
+                                            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border"
+                                                  :class="item.status === 'full' ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-green-500/20 text-green-400 border-green-500/30'">
+                                                <span x-text="item.status === 'full' ? '🔥 已額滿' : '🤝 招募中 (' + item.currentCount + '/' + item.maxCapacity + '人)'"></span>
+                                            </span>
                                         </div>
                                         <p class="text-xs text-gray-400">
                                             日期：<span x-text="formatDate(item.date)"></span> ｜ 時段：<span x-text="item.timeSlot"></span>
@@ -252,6 +263,81 @@
                 </div>
             </div>
 
+            <!-- 🏆 頁面 C：運動球會 / 公會專區 (新增需求) -->
+            <div x-show="currentTab === 'clubs'" class="space-y-6">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                    <h2 class="text-xl font-bold flex items-center space-x-2">
+                        <i class="fa-solid fa-users-rays text-amber-400"></i>
+                        <span>大專運動球會 / 公會社群</span>
+                    </h2>
+                    <button @click="loadClubsData()" class="text-xs text-emerald-400 hover:underline flex items-center space-x-1">
+                        <i class="fa-solid fa-arrows-rotate"></i> <span>刷新球會</span>
+                    </button>
+                </div>
+
+                <!-- 創立球會 -->
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 space-y-4 shadow-lg">
+                    <h3 class="text-sm font-bold border-b border-slate-800 pb-2 text-emerald-400 flex items-center space-x-2">
+                        <i class="fa-solid fa-plus-circle"></i>
+                        <span>建立我的專屬球會</span>
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">球會名稱</label>
+                            <input type="text" x-model="newClubName" placeholder="例如：港大羽毛球勁旅" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">主打運動類別</label>
+                            <select x-model="newClubSport" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+                                <option value="badminton">🏸 羽毛球</option>
+                                <option value="golf">⛳ 高爾夫球</option>
+                                <option value="basketball">🏀 籃球</option>
+                                <option value="pickleball">🥎 匹克球</option>
+                                <option value="volleyball">🏐 排球</option>
+                                <option value="tableTennis">🏓 乒乓球</option>
+                                <option value="tennis">🎾 網球</option>
+                                <option value="swimming">🏊 游泳</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">球會簡介與宣言</label>
+                        <input type="text" x-model="newClubDesc" placeholder="歡迎對這項運動有熱情的大專同學加入！" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
+                    </div>
+                    <button @click="createClubAction()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors">
+                        正式創立球會
+                    </button>
+                </div>
+
+                <!-- 球會列表 -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <template x-for="club in clubsList" :key="club._id">
+                        <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl space-y-3 shadow flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold text-base text-gray-100" x-text="club.name"></span>
+                                    <span class="text-xl" x-text="getSportIcon(club.sportType)"></span>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-1 leading-relaxed" x-text="club.description || '（暫無簡介）'"></p>
+                            </div>
+                            <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                                <span class="text-gray-400">會長：<strong class="text-gray-200" x-text="club.leaderName"></strong></span>
+                                <span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-bold text-[10px]">
+                                    👥 <span x-text="club.members ? club.members.length : 1"></span> 人已加入
+                                </span>
+                            </div>
+                            <button @click="joinClubAction(club)" 
+                                    :disabled="isClubMember(club)"
+                                    :class="isClubMember(club) ? 'bg-slate-800 text-gray-500' : 'bg-blue-600 hover:bg-blue-500 text-white'"
+                                    class="w-full text-xs font-bold py-2 rounded-lg transition-colors">
+                                <span x-text="isClubMember(club) ? '已成功加入球會' : '申請加入球會'"></span>
+                            </button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- 👤 頁面 D：個人設定 -->
             <div x-show="currentTab === 'profile'" class="max-w-xl mx-auto bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6 shadow-lg">
                 <h2 class="text-lg font-bold border-b border-slate-800 pb-3"><i class="fa-solid fa-user-gear text-emerald-500 mr-2"></i>個人帳號雲端設定</h2>
                 
@@ -267,12 +353,12 @@
                 </div>
 
                 <div class="bg-slate-800/40 border border-slate-800 p-4 rounded-xl space-y-4">
-                    <h3 class="text-sm font-bold text-gray-300">🔒 修改安全密碼項目</h3>
+                    <h3 class="text-sm font-bold text-gray-300">🔒 修改安全密碼</h3>
                     <div class="space-y-3">
                         <input type="password" x-model="newPassword" placeholder="輸入新密碼" 
-                               class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500">
+                               class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 text-white">
                         <input type="password" x-model="confirmPassword" placeholder="確認新密碼" 
-                               class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500">
+                               class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-emerald-500 text-white">
                         <button @click="updatePasswordAction()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors">
                             變更密碼項目
                         </button>
@@ -280,13 +366,13 @@
                 </div>
 
                 <button @click="logoutAction()" class="w-full bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-900/50 font-bold py-2.5 rounded-lg text-xs transition-colors">
-                    登出帳戶項目
+                    登出帳戶
                 </button>
             </div>
         </main>
 
         <nav class="bg-slate-900/90 backdrop-blur-md border-t border-slate-800 fixed bottom-0 left-0 right-0 z-40 shadow-xl">
-            <div class="max-w-lg mx-auto flex justify-around py-3">
+            <div class="max-w-md mx-auto flex justify-around py-3">
                 <button @click="currentTab = 'home'" :class="currentTab === 'home' ? 'text-emerald-500' : 'text-gray-400 hover:text-gray-200'" class="flex flex-col items-center space-y-1 transition-colors">
                     <i class="fa-solid fa-table-cells-large text-lg"></i>
                     <span class="text-[10px] font-bold">首頁項目</span>
@@ -294,6 +380,10 @@
                 <button @click="currentTab = 'myBookings'; loadMyMatchedBookings()" :class="currentTab === 'myBookings' ? 'text-emerald-500' : 'text-gray-400 hover:text-gray-200'" class="flex flex-col items-center space-y-1 transition-colors">
                     <i class="fa-solid fa-calendar-days text-lg"></i>
                     <span class="text-[10px] font-bold">我的預約</span>
+                </button>
+                <button @click="currentTab = 'clubs'; loadClubsData()" :class="currentTab === 'clubs' ? 'text-emerald-500' : 'text-gray-400 hover:text-gray-200'" class="flex flex-col items-center space-y-1 transition-colors">
+                    <i class="fa-solid fa-users-rays text-lg"></i>
+                    <span class="text-[10px] font-bold">運動球會</span>
                 </button>
                 <button @click="currentTab = 'profile'" :class="currentTab === 'profile' ? 'text-emerald-500' : 'text-gray-400 hover:text-gray-200'" class="flex flex-col items-center space-y-1 transition-colors">
                     <i class="fa-solid fa-user text-lg"></i>
@@ -303,6 +393,9 @@
         </nav>
     </div>
 
+    <!-- ========================================== -->
+    <!-- 🏸 4. 通用運動大廳彈窗視圖 (Lounge View) -->
+    <!-- ========================================== -->
     <div x-show="currentView === 'lounge'" x-cloak class="min-h-screen bg-slate-950 flex flex-col">
         <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex items-center sticky top-0 z-40">
             <button @click="currentView = 'main'; currentTab = 'home'" class="text-gray-400 hover:text-white mr-4">
@@ -312,23 +405,14 @@
         </header>
 
         <div class="flex-1 max-w-3xl w-full mx-auto p-6 space-y-6 pb-12">
-            <div x-show="activeSport && !isSportUnlocked(activeSport.key)" class="bg-amber-950/20 border border-amber-900/40 p-6 rounded-2xl text-center space-y-4 shadow" x-cloak>
-                <div class="text-amber-400 text-xl font-bold flex items-center justify-center space-x-2">
-                    <i class="fa-solid fa-lock"></i>
-                    <span>🔒 必須先開通本體育項目會員資格</span>
-                </div>
-                <button @click="openPayModal()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-6 py-2.5 rounded-lg transition-colors shadow">
-                    直接確認付款開通
-                </button>
-            </div>
-
-            <div x-show="activeSport && isSportUnlocked(activeSport.key)" class="space-y-6" x-cloak>
+            <div class="space-y-6">
+                <!-- 發布約戰 (支援設定人數上限) -->
                 <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4 shadow">
                     <h3 class="text-sm font-bold border-b border-slate-800 pb-2 flex items-center space-x-2">
                         <i class="fa-regular fa-calendar-plus text-emerald-400"></i>
-                        <span>📅 發布我的空閒時段</span>
+                        <span>📅 發布我的空閒約戰局</span>
                     </h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label class="block text-xs text-gray-400 mb-1">選擇日期</label>
                             <input type="date" x-model="bookDate" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white">
@@ -341,12 +425,23 @@
                                 <option value="19:00 - 21:00">19:00 - 21:00</option>
                             </select>
                         </div>
+                        <!-- 人數限制選單 -->
+                        <div>
+                            <label class="block text-xs text-gray-400 mb-1">目標人數限制 (包含自己)</label>
+                            <select x-model="bookCapacity" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs bg-slate-800 text-white">
+                                <option value="2">2 人 (1v1 對決)</option>
+                                <option value="4">4 人 (雙打 / 雙人組)</option>
+                                <option value="6">6 人 (團體對抗)</option>
+                                <option value="10">10 人 (大型運動團)</option>
+                            </select>
+                        </div>
                     </div>
                     <button @click="createBookingAction()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors">
-                        發布預約邀請項目
+                        發布約戰邀請
                     </button>
                 </div>
 
+                <!-- 大廳約戰池 -->
                 <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow">
                     <div class="p-4 bg-slate-900/50 border-b border-slate-800 flex justify-between items-center">
                         <h4 class="text-xs font-bold text-gray-300">👥 開放中的球友尋找池</h4>
@@ -356,21 +451,29 @@
                     </div>
 
                     <div class="divide-y divide-slate-800">
-                        <template x-for="item in openBookings" :key="item._id">
+                        <template x-for="item in loungeBookings" :key="item._id">
                             <div class="p-4 flex items-center justify-between text-xs hover:bg-slate-850/20">
                                 <div class="space-y-1">
-                                    <span class="font-bold text-sm text-gray-100" x-text="item.hostName"></span>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="font-bold text-sm text-gray-100" x-text="item.hostName"></span>
+                                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full border"
+                                              :class="item.status === 'full' ? 'bg-red-500/20 text-red-400 border-red-500/30' : 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30'">
+                                            <span x-text="item.status === 'full' ? '已額滿' : '招募中 (' + item.currentCount + '/' + item.maxCapacity + '人)'"></span>
+                                        </span>
+                                    </div>
                                     <p class="text-gray-400 text-[11px]">
                                         日期：<span x-text="formatDate(item.date)"></span> ｜ 時段：<span x-text="item.timeSlot"></span>
                                     </p>
                                 </div>
                                 <div>
-                                    <template x-if="item.hostEmail.toLowerCase() === (currentUser ? currentUser.fieldName.toLowerCase() : '')">
-                                        <span class="text-gray-500 italic">等待球友中...</span>
+                                    <template x-if="item.status === 'full'">
+                                        <button disabled class="bg-slate-800 text-gray-500 font-bold px-3 py-1.5 rounded-md cursor-not-allowed">
+                                            人數已滿
+                                        </button>
                                     </template>
-                                    <template x-if="item.hostEmail.toLowerCase() !== (currentUser ? currentUser.fieldName.toLowerCase() : '')">
+                                    <template x-if="item.status !== 'full'">
                                         <button @click="confirmMatchTrigger(item)" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-1.5 rounded-md transition-colors shadow">
-                                            應邀配對
+                                            應邀加入
                                         </button>
                                     </template>
                                 </div>
@@ -382,6 +485,9 @@
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- 💬 5. 加密對話視圖 (Chat View - 支援管理員直接介入監控) -->
+    <!-- ========================================== -->
     <div x-show="currentView === 'chat'" x-cloak class="min-h-screen bg-slate-950 flex flex-col max-w-2xl mx-auto border-x border-slate-800">
         <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
             <div class="flex items-center">
@@ -389,7 +495,12 @@
                     <i class="fa-solid fa-chevron-left text-lg"></i>
                 </button>
                 <div>
-                    <h2 class="font-bold text-sm" x-text="activeChatBooking ? activeChatBooking.hostName + ' 的對話小組' : '對話'"></h2>
+                    <h2 class="font-bold text-sm flex items-center space-x-2">
+                        <span x-text="activeChatBooking ? activeChatBooking.hostName + ' 的對話小組' : '對話'"></span>
+                        <template x-if="currentUser && currentUser.type === 'admin'">
+                            <span class="bg-red-600 text-white text-[9px] px-1.5 py-0.5 rounded font-bold">管理員監控中</span>
+                        </template>
+                    </h2>
                     <p class="text-[9px] text-emerald-400 flex items-center"><span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1 animate-pulse"></span>3秒雙向雲端同步中</p>
                 </div>
             </div>
@@ -398,17 +509,15 @@
             </button>
         </header>
 
-        <div class="bg-amber-950/20 border-b border-amber-950 px-4 py-2 text-[10px] text-amber-400 leading-relaxed">
-            ⚠️ 雲端即時加密對傳中。請注意言行舉止與線下赴約人身安全，本免費平台概不承擔任何用家交友引發之法律與經濟糾紛責任。
-        </div>
-
         <div class="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar bg-slate-950" id="chatStreamBox">
             <template x-for="msg in chatMessagesList" :key="msg._id">
                 <div class="flex items-start space-x-2" :class="isMyMessage(msg) ? 'flex-row-reverse space-x-reverse' : ''">
-                    <div class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 font-bold text-xs flex items-center justify-center text-gray-300"
+                    <div class="w-8 h-8 rounded-lg border font-bold text-xs flex items-center justify-center"
+                         :class="msg.senderEmail === 'admin@sportmatch.com' ? 'bg-red-900 text-white border-red-700' : 'bg-slate-800 border-slate-700 text-gray-300'"
                          x-text="msg.senderName ? msg.senderName.substring(0,1) : '球'"></div>
-                    <div class="max-w-[70%] rounded-xl px-4 py-2.5 text-xs leading-relaxed"
-                         :class="isMyMessage(msg) ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-slate-900 text-gray-100 rounded-tl-none border border-slate-800'">
+                    <div class="max-w-[70%] rounded-xl px-4 py-2.5 text-xs leading-relaxed shadow"
+                         :class="msg.senderEmail === 'admin@sportmatch.com' ? 'bg-red-600 text-white border border-red-500' : isMyMessage(msg) ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-slate-900 text-gray-100 rounded-tl-none border border-slate-800'">
+                        <div class="text-[9px] opacity-75 mb-0.5" x-text="msg.senderName"></div>
                         <p x-text="msg.message"></p>
                     </div>
                 </div>
@@ -424,6 +533,9 @@
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- 👑 6. 系統總管理員控制台 (支援直接點擊進對話室監看) -->
+    <!-- ========================================== -->
     <div x-show="currentView === 'admin'" x-cloak class="min-h-screen flex flex-col bg-slate-950">
         <header class="bg-red-950/20 border-b border-red-900/30 px-6 py-4 flex items-center justify-between sticky top-0 z-50">
             <div class="flex items-center space-x-2">
@@ -452,10 +564,11 @@
                 <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-2">
                     <h3 class="text-sm font-bold text-gray-200" x-text="getAdminTabTitle()"></h3>
                     <button @click="loadAdminDataPackage()" class="text-xs text-red-400 flex items-center space-x-1 hover:underline">
-                        <i class="fa-solid fa-arrows-rotate"></i> <span>刷取全局大數據</span>
+                        <i class="fa-solid fa-arrows-rotate"></i> <span>刷取全局數據</span>
                     </button>
                 </div>
 
+                <!-- A. 管理員預約 -->
                 <div x-show="adminTab === 'bookings'" class="overflow-x-auto">
                     <table class="w-full text-xs text-left border-collapse">
                         <thead>
@@ -463,8 +576,8 @@
                                 <th class="p-3">運動項目</th>
                                 <th class="p-3">發起人</th>
                                 <th class="p-3">時段與日期</th>
-                                <th class="p-3">應邀對象</th>
-                                <th class="p-3">狀態</th>
+                                <th class="p-3">人數進度</th>
+                                <th class="p-3">操作</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-800/60">
@@ -479,11 +592,14 @@
                                         <div x-text="formatDate(item.date)"></div>
                                         <div class="text-[10px] text-gray-400" x-text="item.timeSlot"></div>
                                     </td>
-                                    <td class="p-3 text-gray-400" x-text="item.guestEmail || '（暫無）'"></td>
                                     <td class="p-3">
-                                        <span :class="item.status === 'open' ? 'text-amber-400 bg-amber-500/10' : 'text-green-400 bg-green-500/10'" class="px-2 py-0.5 rounded-md font-bold text-[10px]">
-                                            <span x-text="item.status === 'open' ? '開放中' : '已配對'"></span>
-                                        </span>
+                                        <span class="font-bold text-emerald-400" x-text="item.currentCount + '/' + item.maxCapacity + '人'"></span>
+                                    </td>
+                                    <td class="p-3">
+                                        <button @click="openAdminChatRoom(item)" class="bg-red-600 hover:bg-red-500 text-white font-bold px-2.5 py-1 rounded text-[10px] flex items-center space-x-1">
+                                            <i class="fa-solid fa-eye"></i>
+                                            <span>👁️ 監控對話室</span>
+                                        </button>
                                     </td>
                                 </tr>
                             </template>
@@ -491,6 +607,7 @@
                     </table>
                 </div>
 
+                <!-- B. 管理員對話 -->
                 <div x-show="adminTab === 'messages'" class="space-y-3 max-h-[500px] overflow-y-auto no-scrollbar">
                     <template x-for="msg in adminMessages" :key="msg._id">
                         <div class="p-3 bg-slate-950/50 border border-slate-800 rounded-xl space-y-1.5 text-xs">
@@ -503,6 +620,7 @@
                     </template>
                 </div>
 
+                <!-- C. 管理員投訴 -->
                 <div x-show="adminTab === 'complaints'" class="space-y-4 max-h-[500px] overflow-y-auto no-scrollbar">
                     <template x-for="comp in adminComplaints" :key="comp._id">
                         <div class="p-4 bg-red-950/10 border border-red-900/20 rounded-xl space-y-2 text-xs">
@@ -513,7 +631,7 @@
                                 <span class="text-[10px] text-gray-500" x-text="comp.timestamp"></span>
                             </div>
                             <div class="text-gray-300 leading-relaxed bg-slate-900 p-2.5 rounded border border-slate-800">
-                                <span x-text="comp.details || '（未提供詳細文字說明）'"></span>
+                                <span x-text="comp.details || '（未提供詳細說明）'"></span>
                             </div>
                         </div>
                     </template>
@@ -522,50 +640,24 @@
         </div>
     </div>
 
-    <div x-show="isShowingComplaintModal" x-cloak class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-6 space-y-4">
-            <div class="flex items-center space-x-2 text-red-400 border-b border-slate-800 pb-2">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-                <h3 class="font-bold text-base">🚨 違規緊急舉報中心</h3>
-            </div>
-            <div class="space-y-3 text-xs">
-                <div>
-                    <label class="block text-gray-400 font-semibold mb-1">🛡️ 違規舉報類型</label>
-                    <select x-model="complaintReason" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs bg-slate-800 text-white">
-                        <option value="對方放飛機 (未出席約定項目)">對方放飛機 (未出席約定項目)</option>
-                        <option value="溝通含有不道德言語 / 騷擾行為">溝通含有不道德言語 / 騷擾行為</option>
-                        <option value="金錢、財產涉及詐騙懷疑">金錢、財產涉及詐騙懷疑</option>
-                        <option value="其他違規行為">其他違規行為</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-gray-400 font-semibold mb-1">📝 詳細具體事由說明</label>
-                    <textarea x-model="complaintDetails" rows="3" placeholder="請輸入投訴詳細內容..."
-                              class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white resize-none"></textarea>
-                </div>
-            </div>
-            <div class="flex space-x-2 pt-2 text-xs">
-                <button @click="isShowingComplaintModal = false" class="flex-1 bg-slate-800 hover:bg-slate-700 py-2 rounded-lg">取消</button>
-                <button @click="submitComplaintAction()" :disabled="isComplaintSubmitting" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-lg">確認送出</button>
-            </div>
-        </div>
-    </div>
-
+    <!-- 🤝 約戰確認 Modal -->
     <div x-show="isShowingMatchModal" x-cloak class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-2xl p-6 space-y-4 text-center">
-            <h3 class="font-bold text-md text-gray-100">🤝 搓合扣費風險確認</h3>
+            <h3 class="font-bold text-md text-gray-100">🤝 約戰組隊確認</h3>
             <p class="text-[11px] text-gray-400 text-left leading-relaxed bg-slate-950 p-3 rounded-lg border border-slate-800">
-                ⚠️ 媒合提醒：成單後請務必注意個人人身安全。本平台屬於完全免費之公開媒合工具，與用家線下見面相約所產生的任何人身糾紛、財產摩擦或意外損害概與本平台無關。
+                ⚠️ 提醒：請注意個人人身與財產安全。本平台屬於完全免費之公開媒合工具，線下見面請選擇公共體育場館。
             </p>
             <div class="flex space-x-2 text-xs">
                 <button @click="isShowingMatchModal = false" class="flex-1 bg-slate-800 hover:bg-slate-700 py-2 rounded-lg">取消</button>
-                <button @click="executeMatchAction()" class="flex-1 bg-blue-600 hover:bg-blue-500 py-2 rounded-lg font-bold text-white">確認風險並進入對話</button>
+                <button @click="executeMatchAction()" class="flex-1 bg-blue-600 hover:bg-blue-500 py-2 rounded-lg font-bold text-white">確認加入局</button>
             </div>
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- ⚙️ JavaScript 核心驅動引擎 -->
+    <!-- ========================================== -->
     <script>
-        // ⚡ 核心修正 1：完美補上網頁前端漏掉的 Config 連線網址配置區
         const Config = {
             googleSheetsAPIURL: "https://script.google.com/macros/s/AKfycbyEZFlnMIru9gpcQlWwm533AuAkui7W5BvbcBr1LFez2pLJ1NlRWuKty-Hzz0F5PfEl9Q/exec"
         };
@@ -576,14 +668,12 @@
                 headers: { 'Content-Type': 'text/plain' },
                 body: JSON.stringify(payload)
             });
-            
             const rawText = await response.text();
             try {
                 return JSON.parse(rawText);
             } catch(err) {
-                // 🔬 探針診斷日誌：如果 Google 後端程式碼有任何報錯網頁，將在控制台毫無保留直接印出
-                console.error("🚨 【真兇現形】Google 後端並未回傳 JSON，其原始錯誤網頁內容如下：\n", rawText);
-                throw new Error("Google後端服務器指令碼崩潰");
+                console.error("🚨 後端崩潰原始訊息:\n", rawText);
+                throw new Error("後端連線異常");
             }
         }
 
@@ -591,26 +681,27 @@
             return {
                 isLoggedIn: false,
                 currentView: 'login', currentTab: 'home', adminTab: 'bookings',
-                isLoading: false, isSubmitting: false, isComplaintSubmitting: false, errorMessage: '',
+                isLoading: false, isSubmitting: false, errorMessage: '',
                 loginEmail: '', loginPassword: '', regName: '', regEmail: '', regPassword: '', agreeToTerms: false,
                 detectionText: '請輸入電郵，系統將自動分析域名...', detectedType: 'public', detectedInstitution: '無（公眾）',
                 currentUser: null,
                 sportsList: [
-                    { key: 'badminton', title: '羽毛球專區', icon: '🏸', bg: 'bg-gradient-to-br from-blue-600 to-indigo-700', btnBg: 'bg-blue-600 hover:bg-blue-500', info: '學生：$20 / 公眾：$50' },
-                    { key: 'golf', title: '高爾夫球區', icon: '⛳', bg: 'bg-gradient-to-br from-emerald-600 to-teal-700', btnBg: 'bg-emerald-600 hover:bg-emerald-500', info: '項目費用：一律 $200' },
-                    { key: 'basketball', title: '熱血籃球區', icon: '🏀', bg: 'bg-gradient-to-br from-orange-500 to-amber-600', btnBg: 'bg-orange-500 hover:bg-orange-400', info: '學生：$15 / 公眾：$40' },
-                    { key: 'pickleball', title: '匹克球特區', icon: '🥎', bg: 'bg-gradient-to-br from-pink-600 to-rose-700', btnBg: 'bg-pink-600 hover:bg-pink-500', info: '學生：$20 / 公眾：$45' },
-                    { key: 'volleyball', title: '校園排球聯網', icon: '🏐', bg: 'bg-gradient-to-br from-purple-600 to-fuchsia-700', btnBg: 'bg-purple-600 hover:bg-purple-500', info: '學生：$15 / 公眾：$35' },
-                    { key: 'tableTennis', title: '乒乓球對戰區', icon: '🏓', bg: 'bg-gradient-to-br from-cyan-600 to-blue-700', btnBg: 'bg-cyan-600 hover:bg-cyan-500', info: '學生：$10 / 公眾：$25' },
-                    { key: 'tennis', title: '挑戰精英網球場', icon: '🎾', bg: 'bg-gradient-to-br from-teal-600 to-emerald-700', btnBg: 'bg-teal-600 hover:bg-teal-500', info: '學生：$25 / 公眾：$60' },
-                    { key: 'swimming', title: '大專游泳池', icon: '🏊', bg: 'bg-gradient-to-br from-indigo-600 to-blue-800', btnBg: 'bg-indigo-600 hover:bg-indigo-500', info: '學生：$12 / 公眾：$30' }
+                    { key: 'badminton', title: '羽毛球專區', icon: '🏸', bg: 'bg-gradient-to-br from-blue-600 to-indigo-700', btnBg: 'bg-blue-600 hover:bg-blue-500', info: '熱門大眾媒合 ｜ 免費約戰' },
+                    { key: 'golf', title: '高爾夫球區', icon: '⛳', bg: 'bg-gradient-to-br from-emerald-600 to-teal-700', btnBg: 'bg-emerald-600 hover:bg-emerald-500', info: '揮桿約局 ｜ 完全免費' },
+                    { key: 'basketball', title: '熱血籃球區', icon: '🏀', bg: 'bg-gradient-to-br from-orange-500 to-amber-600', btnBg: 'bg-orange-500 hover:bg-orange-400', info: '全場鬥牛 ｜ 免費約戰' },
+                    { key: 'pickleball', title: '匹克球特區', icon: '🥎', bg: 'bg-gradient-to-br from-pink-600 to-rose-700', btnBg: 'bg-pink-600 hover:bg-pink-500', info: '新潮運動 ｜ 免費組隊' },
+                    { key: 'volleyball', title: '校園排球聯網', icon: '🏐', bg: 'bg-gradient-to-br from-purple-600 to-fuchsia-700', btnBg: 'bg-purple-600 hover:bg-purple-500', info: '團隊組局 ｜ 免費約戰' },
+                    { key: 'tableTennis', title: '乒乓球對戰區', icon: '🏓', bg: 'bg-gradient-to-br from-cyan-600 to-blue-700', btnBg: 'bg-cyan-600 hover:bg-cyan-500', info: '桌球對決 ｜ 完全免費' },
+                    { key: 'tennis', title: '挑戰精英網球場', icon: '🎾', bg: 'bg-gradient-to-br from-teal-600 to-emerald-700', btnBg: 'bg-teal-600 hover:bg-teal-500', info: '網球約局 ｜ 免費媒合' },
+                    { key: 'swimming', title: '大專游泳池', icon: '🏊', bg: 'bg-gradient-to-br from-indigo-600 to-blue-800', btnBg: 'bg-indigo-600 hover:bg-indigo-500', info: '泳友交流 ｜ 免費約局' }
                 ],
                 suggestionsList: [], newSportSuggestion: '',
-                activeSport: null, loungeBookings: [], bookDate: new Date().toISOString().split('T')[0], bookTime: '14:00 - 16:00',
+                activeSport: null, loungeBookings: [], bookDate: new Date().toISOString().split('T')[0], bookTime: '14:00 - 16:00', bookCapacity: 2,
                 matchedBookings: [], targetMatchingItem: null, isShowingMatchModal: false,
                 activeChatBooking: null, chatMessagesList: [], typeText: '', chatTimer: null,
                 isShowingComplaintModal: false, complaintReason: '對方放飛機 (未出席約定項目)', complaintDetails: '',
                 adminBookings: [], adminMessages: [], adminComplaints: [],
+                clubsList: [], newClubName: '', newClubSport: 'badminton', newClubDesc: '',
                 newPassword: '', confirmPassword: '',
 
                 initApp() {},
@@ -632,7 +723,7 @@
                         this.detectionText = `💡 智能判定：[${this.detectedInstitution}] ${this.detectedType === 'student' ? '在校生' : '校友'}身份。`;
                     } else {
                         this.detectedType = 'public'; this.detectedInstitution = '無（公眾）';
-                        this.detectionText = 'ℹ️ 一般網域（如 Gmail），將劃分為 [公眾會員]。';
+                        this.detectionText = 'ℹ️ 一般網域（如 Gmail），劃分為 [公眾會員]。';
                     }
                 },
 
@@ -653,11 +744,7 @@
                                 await this.loadMyMatchedBookings();
                             }
                         } else { this.errorMessage = res.message || '帳號或密碼錯誤'; }
-                    } catch(e) { 
-                        // ⚡ 核心優化 2：捕獲底層運行錯誤並完整印出，拒絕盲目吃掉資訊
-                        console.error("🚨 登入程序發生底層攔截錯誤：", e);
-                        this.errorMessage = '雲端連線失敗，請稍後再試。'; 
-                    }
+                    } catch(e) { this.errorMessage = '雲端連線失敗，請稍後再試。'; }
                     this.isLoading = false;
                 },
 
@@ -672,27 +759,13 @@
                             alert("🎉 註冊成功，帳號資料已安全同步至 Google 試算表！");
                             this.currentView = 'login';
                         } else { alert("🚨 註冊失敗: " + res.message); }
-                    } catch(e) { console.error(e); alert("連線超時。"); }
+                    } catch(e) { alert("連線超時。"); }
                     this.isLoading = false;
-                },
-
-                isSportUnlocked(key) { return this.currentUser ? this.currentUser[key] === true : false; },
-
-                async openPayModal() {
-                    if(!confirm(`確認解鎖 ${this.activeSport.title}？`)) return;
-                    try {
-                        let res = await fetchFromGoogle({ action: 'updateMembership', email: this.currentUser.fieldName, sport: this.activeSport.key });
-                        if(res.success) {
-                            this.currentUser[this.activeSport.key] = true;
-                            alert("💳 開通成功！已成功往 Google 試算表寫入權限。");
-                            await this.loadLoungeBookings();
-                        }
-                    } catch(e) { alert("開通失敗"); }
                 },
 
                 async enterSportLounge(sport) {
                     this.activeSport = sport; this.currentView = 'lounge';
-                    if(this.isSportUnlocked(sport.key)) { await this.loadLoungeBookings(); }
+                    await this.loadLoungeBookings();
                 },
 
                 async loadLoungeBookings() {
@@ -702,16 +775,14 @@
                     } catch(e) {}
                 },
 
-                get openBookings() { return this.loungeBookings.filter(b => b.status === 'open'); },
-
                 async createBookingAction() {
                     try {
                         let res = await fetchFromGoogle({
                             action: 'createBooking', hostEmail: this.currentUser.fieldName, hostName: this.currentUser.name,
-                            sportType: this.activeSport.key, date: this.bookDate, timeSlot: this.bookTime
+                            sportType: this.activeSport.key, date: this.bookDate, timeSlot: this.bookTime, maxCapacity: this.bookCapacity
                         });
                         if(res.success) {
-                            alert("🎉 發布成功！試算表已同步建立空閒排程。");
+                            alert("🎉 約戰局發布成功！已成功設定人數上限。");
                             await this.loadLoungeBookings();
                         }
                     } catch(e) {}
@@ -722,12 +793,15 @@
                 async executeMatchAction() {
                     this.isShowingMatchModal = false;
                     try {
-                        let res = await fetchFromGoogle({ action: 'matchBooking', bookingId: this.targetMatchingItem._id, guestEmail: this.currentUser.fieldName });
+                        let res = await fetchFromGoogle({
+                            action: 'matchBooking', bookingId: this.targetMatchingItem._id,
+                            guestEmail: this.currentUser.fieldName, guestName: this.currentUser.name
+                        });
                         if(res.success) {
-                            alert("💸 配對成功！此行程已自動鎖定並轉移至底部的「我的預約」分頁。");
+                            alert("🎉 成功加入約戰局！已轉移至「我的預約」分頁進行溝通。");
                             this.currentView = 'main'; this.currentTab = 'myBookings';
                             await this.loadMyMatchedBookings();
-                        }
+                        } else { alert(res.message || "加入失敗"); }
                     } catch(e) { alert("配對連線失敗"); }
                 },
 
@@ -746,9 +820,23 @@
                     this.chatTimer = setInterval(() => { this.syncMessages(); }, 3000);
                 },
 
+                // 管理員專屬監控入口
+                async openAdminChatRoom(booking) {
+                    this.activeChatBooking = booking;
+                    this.currentView = 'chat';
+                    await this.syncMessages();
+                    if(!this.chatTimer) {
+                        this.chatTimer = setInterval(() => { this.syncMessages(); }, 3000);
+                    }
+                },
+
                 closeChatRoom() {
                     if(this.chatTimer) { clearInterval(this.chatTimer); this.chatTimer = null; }
-                    this.currentView = 'main'; this.currentTab = 'myBookings';
+                    if(this.currentUser && this.currentUser.type === 'admin') {
+                        this.currentView = 'admin';
+                    } else {
+                        this.currentView = 'main'; this.currentTab = 'myBookings';
+                    }
                 },
 
                 async syncMessages() {
@@ -778,8 +866,47 @@
                     } catch(e) {}
                 },
 
+                // 運動球會 / 公會系統
+                async loadClubsData() {
+                    try {
+                        let data = await fetchFromGoogle({ action: 'getClubs' });
+                        if(data.success) { this.clubsList = data.items || []; }
+                    } catch(e) {}
+                },
+
+                async createClubAction() {
+                    if(!this.newClubName.trim()) { alert("請輸入球會名稱"); return; }
+                    try {
+                        let res = await fetchFromGoogle({
+                            action: 'createClub', name: this.newClubName, sportType: this.newClubSport,
+                            description: this.newClubDesc, leaderEmail: this.currentUser.fieldName, leaderName: this.currentUser.name
+                        });
+                        if(res.success) {
+                            alert("🎉 成功創立球會！");
+                            this.newClubName = ''; this.newClubDesc = '';
+                            await this.loadClubsData();
+                        }
+                    } catch(e) {}
+                },
+
+                isClubMember(club) {
+                    if(!this.currentUser || !club.members) return false;
+                    return club.members.some(m => m.email.toLowerCase() === this.currentUser.fieldName.toLowerCase());
+                },
+
+                async joinClubAction(club) {
+                    try {
+                        let res = await fetchFromGoogle({
+                            action: 'joinClub', clubId: club._id, userEmail: this.currentUser.fieldName, userName: this.currentUser.name
+                        });
+                        if(res.success) {
+                            alert("🎉 成功加入球會社群！");
+                            await this.loadClubsData();
+                        }
+                    } catch(e) {}
+                },
+
                 async submitComplaintAction() {
-                    this.isComplaintSubmitting = true;
                     try {
                         let res = await fetchFromGoogle({
                             action: 'sendComplaint', bookingId: this.activeChatBooking ? this.activeChatBooking._id : 'N/A',
@@ -787,10 +914,9 @@
                         });
                         if(res.success) {
                             this.isShowingComplaintModal = false; this.complaintDetails = '';
-                            alert("提示\n\n投訴舉報處理完成！資料已即時同步寫入 Google 試算表，並且已發送緊急警報電郵通知管理員實施封號。");
-                        } else { alert("🚨 舉報失敗: " + (res.message || "後台未知錯誤")); }
-                    } catch(e) { alert("連線超時，請檢查網絡。"); }
-                    this.isComplaintSubmitting = false;
+                            alert("舉報處理完成！已即時同步寫入 Google 試算表。");
+                        }
+                    } catch(e) {}
                 },
 
                 async fetchSuggestions() {
@@ -806,9 +932,9 @@
                         let res = await fetchFromGoogle({ action: 'updatePassword', email: this.currentUser.fieldName, newPassword: this.newPassword });
                         if(res.success) {
                             this.currentUser.password = this.newPassword; this.newPassword = ''; this.confirmPassword = '';
-                            alert("🎉 試算表密碼已同步變更項目！");
+                            alert("🎉 密碼已同步變更！");
                         }
-                    } catch(e) { alert("修改失敗"); }
+                    } catch(e) {}
                 },
 
                 async loadAdminDataPackage() {
@@ -823,9 +949,9 @@
                 },
 
                 getAdminTabTitle() {
-                    if(this.adminTab === 'bookings') return '📊 跨校全網運動配對時間單審查';
-                    if(this.adminTab === 'messages') return '👁️ 全網端對端端加密通訊實時核查流';
-                    return '🚩 投訴中心一鍵警報與 Email 送達名單';
+                    if(this.adminTab === 'bookings') return '📊 跨校全網約局時間單審查';
+                    if(this.adminTab === 'messages') return '👁️ 全網實時對話監控與處置';
+                    return '🚩 檢舉舉報中心';
                 },
 
                 handleLogout() { this.currentUser = null; this.isLoggedIn = false; this.currentView = 'login'; },
