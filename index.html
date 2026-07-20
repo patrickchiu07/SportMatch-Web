@@ -263,7 +263,7 @@
                 </div>
             </div>
 
-            <!-- 🏆 頁面 C：運動球會 / 公會專區 (新增需求) -->
+            <!-- 🏆 頁面 C：運動球會 / 公會專區 -->
             <div x-show="currentTab === 'clubs'" class="space-y-6">
                 <div class="flex justify-between items-center border-b border-slate-800 pb-3">
                     <h2 class="text-xl font-bold flex items-center space-x-2">
@@ -406,7 +406,7 @@
 
         <div class="flex-1 max-w-3xl w-full mx-auto p-6 space-y-6 pb-12">
             <div class="space-y-6">
-                <!-- 發布約戰 (支援設定人數上限) -->
+                <!-- 發布約戰 -->
                 <div class="bg-slate-900 border border-slate-800 p-6 rounded-xl space-y-4 shadow">
                     <h3 class="text-sm font-bold border-b border-slate-800 pb-2 flex items-center space-x-2">
                         <i class="fa-regular fa-calendar-plus text-emerald-400"></i>
@@ -425,7 +425,6 @@
                                 <option value="19:00 - 21:00">19:00 - 21:00</option>
                             </select>
                         </div>
-                        <!-- 人數限制選單 -->
                         <div>
                             <label class="block text-xs text-gray-400 mb-1">目標人數限制 (包含自己)</label>
                             <select x-model="bookCapacity" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs bg-slate-800 text-white">
@@ -486,7 +485,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 💬 5. 加密對話視圖 (Chat View - 支援管理員直接介入監控) -->
+    <!-- 💬 5. 加密對話視圖 -->
     <!-- ========================================== -->
     <div x-show="currentView === 'chat'" x-cloak class="min-h-screen bg-slate-950 flex flex-col max-w-2xl mx-auto border-x border-slate-800">
         <header class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
@@ -534,7 +533,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 👑 6. 系統總管理員控制台 (支援直接點擊進對話室監看) -->
+    <!-- 👑 6. 系統總管理員控制台 (全面掌控區) -->
     <!-- ========================================== -->
     <div x-show="currentView === 'admin'" x-cloak class="min-h-screen flex flex-col bg-slate-950">
         <header class="bg-red-950/20 border-b border-red-900/30 px-6 py-4 flex items-center justify-between sticky top-0 z-50">
@@ -548,9 +547,13 @@
         </header>
 
         <div class="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col lg:flex-row gap-6 pb-12">
-            <div class="w-full lg:w-48 flex lg:flex-col gap-2 shrink-0">
+            <!-- 後台導航標籤 -->
+            <div class="w-full lg:w-52 flex lg:flex-col gap-2 shrink-0">
                 <button @click="adminTab = 'bookings'" :class="adminTab === 'bookings' ? 'bg-red-600 text-white' : 'bg-slate-900 text-gray-400 border border-slate-800'" class="w-full py-3 px-4 rounded-xl text-xs font-bold text-left flex items-center space-x-2">
                     <i class="fa-solid fa-database"></i> <span>全局預約審查</span>
+                </button>
+                <button @click="adminTab = 'clubs'" :class="adminTab === 'clubs' ? 'bg-red-600 text-white' : 'bg-slate-900 text-gray-400 border border-slate-800'" class="w-full py-3 px-4 rounded-xl text-xs font-bold text-left flex items-center space-x-2">
+                    <i class="fa-solid fa-users-gear"></i> <span>運動球會管理</span>
                 </button>
                 <button @click="adminTab = 'messages'" :class="adminTab === 'messages' ? 'bg-red-600 text-white' : 'bg-slate-900 text-gray-400 border border-slate-800'" class="w-full py-3 px-4 rounded-xl text-xs font-bold text-left flex items-center space-x-2">
                     <i class="fa-regular fa-comments"></i> <span>實時通訊審查</span>
@@ -558,8 +561,12 @@
                 <button @click="adminTab = 'complaints'" :class="adminTab === 'complaints' ? 'bg-red-600 text-white' : 'bg-slate-900 text-gray-400 border border-slate-800'" class="w-full py-3 px-4 rounded-xl text-xs font-bold text-left flex items-center space-x-2">
                     <i class="fa-solid fa-circle-exclamation"></i> <span>投訴管理中心</span>
                 </button>
+                <button @click="adminTab = 'settings'" :class="adminTab === 'settings' ? 'bg-red-600 text-white' : 'bg-slate-900 text-gray-400 border border-slate-800'" class="w-full py-3 px-4 rounded-xl text-xs font-bold text-left flex items-center space-x-2">
+                    <i class="fa-solid fa-key"></i> <span>密碼設定</span>
+                </button>
             </div>
 
+            <!-- 後台內容面板 -->
             <div class="flex-1 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl overflow-hidden min-h-[400px]">
                 <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-2">
                     <h3 class="text-sm font-bold text-gray-200" x-text="getAdminTabTitle()"></h3>
@@ -568,7 +575,7 @@
                     </button>
                 </div>
 
-                <!-- A. 管理員預約 -->
+                <!-- A. 管理員預約審查 (可修改人數) -->
                 <div x-show="adminTab === 'bookings'" class="overflow-x-auto">
                     <table class="w-full text-xs text-left border-collapse">
                         <thead>
@@ -577,7 +584,7 @@
                                 <th class="p-3">發起人</th>
                                 <th class="p-3">時段與日期</th>
                                 <th class="p-3">人數進度</th>
-                                <th class="p-3">操作</th>
+                                <th class="p-3">管理員控制權限</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-800/60">
@@ -595,10 +602,16 @@
                                     <td class="p-3">
                                         <span class="font-bold text-emerald-400" x-text="item.currentCount + '/' + item.maxCapacity + '人'"></span>
                                     </td>
-                                    <td class="p-3">
-                                        <button @click="openAdminChatRoom(item)" class="bg-red-600 hover:bg-red-500 text-white font-bold px-2.5 py-1 rounded text-[10px] flex items-center space-x-1">
+                                    <td class="p-3 flex items-center space-x-2">
+                                        <!-- 修改人數按鈕 -->
+                                        <button @click="adminModifyCapacity(item)" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-2 py-1 rounded text-[10px] flex items-center space-x-1">
+                                            <i class="fa-solid fa-pen-to-square"></i>
+                                            <span>修改人數</span>
+                                        </button>
+                                        <!-- 監控對話按鈕 -->
+                                        <button @click="openAdminChatRoom(item)" class="bg-red-600 hover:bg-red-500 text-white font-bold px-2 py-1 rounded text-[10px] flex items-center space-x-1">
                                             <i class="fa-solid fa-eye"></i>
-                                            <span>👁️ 監控對話室</span>
+                                            <span>監控對話</span>
                                         </button>
                                     </td>
                                 </tr>
@@ -607,7 +620,43 @@
                     </table>
                 </div>
 
-                <!-- B. 管理員對話 -->
+                <!-- B. 運動球會管理 (新增需求) -->
+                <div x-show="adminTab === 'clubs'" class="overflow-x-auto space-y-4">
+                    <table class="w-full text-xs text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 text-gray-400 font-semibold bg-slate-950/40">
+                                <th class="p-3">球會名稱</th>
+                                <th class="p-3">主打運動</th>
+                                <th class="p-3">會長資訊</th>
+                                <th class="p-3">人數</th>
+                                <th class="p-3">操作控制</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800/60">
+                            <template x-for="club in adminClubs" :key="club._id">
+                                <tr class="hover:bg-slate-850/20">
+                                    <td class="p-3 font-bold text-white" x-text="club.name"></td>
+                                    <td class="p-3 font-bold text-emerald-400" x-text="getSportIcon(club.sportType) + ' ' + club.sportType"></td>
+                                    <td class="p-3">
+                                        <div class="font-semibold text-gray-200" x-text="club.leaderName"></div>
+                                        <div class="text-[10px] text-gray-400" x-text="club.leaderEmail"></div>
+                                    </td>
+                                    <td class="p-3 font-semibold text-emerald-400" x-text="(club.members ? club.members.length : 1) + ' 人'"></td>
+                                    <td class="p-3 flex items-center space-x-2">
+                                        <button @click="adminEditClub(club)" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-2.5 py-1 rounded text-[10px]">
+                                            ✏️ 編輯球會
+                                        </button>
+                                        <button @click="adminDeleteClubAction(club)" class="bg-red-600 hover:bg-red-500 text-white font-bold px-2.5 py-1 rounded text-[10px]">
+                                            🗑️ 強制解散
+                                        </button>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- C. 管理員對話監控 -->
                 <div x-show="adminTab === 'messages'" class="space-y-3 max-h-[500px] overflow-y-auto no-scrollbar">
                     <template x-for="msg in adminMessages" :key="msg._id">
                         <div class="p-3 bg-slate-950/50 border border-slate-800 rounded-xl space-y-1.5 text-xs">
@@ -620,7 +669,7 @@
                     </template>
                 </div>
 
-                <!-- C. 管理員投訴 -->
+                <!-- D. 投訴管理中心 -->
                 <div x-show="adminTab === 'complaints'" class="space-y-4 max-h-[500px] overflow-y-auto no-scrollbar">
                     <template x-for="comp in adminComplaints" :key="comp._id">
                         <div class="p-4 bg-red-950/10 border border-red-900/20 rounded-xl space-y-2 text-xs">
@@ -635,6 +684,24 @@
                             </div>
                         </div>
                     </template>
+                </div>
+
+                <!-- E. 管理員修改密碼 (新增需求) -->
+                <div x-show="adminTab === 'settings'" class="max-w-md mx-auto space-y-4 pt-4">
+                    <h4 class="text-sm font-bold text-red-400 border-b border-slate-800 pb-2">🔑 修改管理員中央控制台密碼</h4>
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <label class="block text-gray-400 mb-1">設定新管理員密碼</label>
+                            <input type="password" x-model="adminNewPass" placeholder="請輸入新密碼" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white">
+                        </div>
+                        <div>
+                            <label class="block text-gray-400 mb-1">再次確認新密碼</label>
+                            <input type="password" x-model="adminConfirmPass" placeholder="再次確認新密碼" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-white">
+                        </div>
+                        <button @click="adminChangePasswordAction()" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2.5 rounded-lg transition-colors">
+                            確認同步更新管理員密碼
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -700,7 +767,8 @@
                 matchedBookings: [], targetMatchingItem: null, isShowingMatchModal: false,
                 activeChatBooking: null, chatMessagesList: [], typeText: '', chatTimer: null,
                 isShowingComplaintModal: false, complaintReason: '對方放飛機 (未出席約定項目)', complaintDetails: '',
-                adminBookings: [], adminMessages: [], adminComplaints: [],
+                adminBookings: [], adminMessages: [], adminComplaints: [], adminClubs: [],
+                adminNewPass: '', adminConfirmPass: '',
                 clubsList: [], newClubName: '', newClubSport: 'badminton', newClubDesc: '',
                 newPassword: '', confirmPassword: '',
 
@@ -820,7 +888,6 @@
                     this.chatTimer = setInterval(() => { this.syncMessages(); }, 3000);
                 },
 
-                // 管理員專屬監控入口
                 async openAdminChatRoom(booking) {
                     this.activeChatBooking = booking;
                     this.currentView = 'chat';
@@ -906,6 +973,61 @@
                     } catch(e) {}
                 },
 
+                // 👑 管理員專屬操作功能 (新增需求)
+                async adminModifyCapacity(item) {
+                    let newCap = prompt(`請輸入 ${item.hostName} 約局的新人數上限:`, item.maxCapacity);
+                    if(!newCap || isNaN(newCap) || Number(newCap) < 1) return;
+                    try {
+                        let res = await fetchFromGoogle({ action: 'adminUpdateBookingCapacity', bookingId: item._id, newCapacity: Number(newCap) });
+                        if(res.success) {
+                            alert("🎉 人數上限已成功更新！");
+                            await this.loadAdminDataPackage();
+                        }
+                    } catch(e) { alert("更新失敗"); }
+                },
+
+                async adminEditClub(club) {
+                    let name = prompt("編輯球會名稱:", club.name); if(name === null) return;
+                    let desc = prompt("編輯球會簡介:", club.description); if(desc === null) return;
+                    let leaderName = prompt("編輯會長姓名:", club.leaderName); if(leaderName === null) return;
+                    
+                    try {
+                        let res = await fetchFromGoogle({
+                            action: 'adminUpdateClub', clubId: club._id,
+                            name: name, sportType: club.sportType, description: desc,
+                            leaderEmail: club.leaderEmail, leaderName: leaderName
+                        });
+                        if(res.success) {
+                            alert("🎉 球會資料已更新！");
+                            await this.loadAdminDataPackage();
+                        }
+                    } catch(e) { alert("修改失敗"); }
+                },
+
+                async adminDeleteClubAction(club) {
+                    if(!confirm(`⚠️ 確定要強制解散刪除【${club.name}】嗎？`)) return;
+                    try {
+                        let res = await fetchFromGoogle({ action: 'adminDeleteClub', clubId: club._id });
+                        if(res.success) {
+                            alert("🗑️ 球會已強制刪除！");
+                            await this.loadAdminDataPackage();
+                        }
+                    } catch(e) { alert("刪除失敗"); }
+                },
+
+                async adminChangePasswordAction() {
+                    if(!this.adminNewPass || this.adminNewPass !== this.adminConfirmPass) {
+                        alert("⚠️ 兩次輸入的新密碼不一致！"); return;
+                    }
+                    try {
+                        let res = await fetchFromGoogle({ action: 'adminUpdatePassword', newPassword: this.adminNewPass });
+                        if(res.success) {
+                            alert("🎉 管理員密碼已同步更新成功！下次登入請使用新密碼。");
+                            this.adminNewPass = ''; this.adminConfirmPass = '';
+                        }
+                    } catch(e) { alert("修改密碼失敗"); }
+                },
+
                 async submitComplaintAction() {
                     try {
                         let res = await fetchFromGoogle({
@@ -944,14 +1066,17 @@
                             this.adminBookings = data.bookings || [];
                             this.adminMessages = data.messages || [];
                             this.adminComplaints = data.complaints || [];
+                            this.adminClubs = data.clubs || [];
                         }
                     } catch(e) {}
                 },
 
                 getAdminTabTitle() {
-                    if(this.adminTab === 'bookings') return '📊 跨校全網約局時間單審查';
+                    if(this.adminTab === 'bookings') return '📊 跨校全網約局時間單審查 (可修改人數)';
+                    if(this.adminTab === 'clubs') return '🏛️ 大專運動球會/公會控制中心';
                     if(this.adminTab === 'messages') return '👁️ 全網實時對話監控與處置';
-                    return '🚩 檢舉舉報中心';
+                    if(this.adminTab === 'complaints') return '🚩 檢舉舉報中心';
+                    return '🔑 管理員密碼安全設定';
                 },
 
                 handleLogout() { this.currentUser = null; this.isLoggedIn = false; this.currentView = 'login'; },
