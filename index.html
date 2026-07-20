@@ -122,7 +122,7 @@
                         <span>平台重要法律免責聲明</span>
                     </div>
                     <p class="text-[11px] text-gray-400 leading-relaxed">
-                        本平台為「完全免費」之校園與公眾體育媒合空間。用家於此進行的所有行為皆屬個人自發社交。本平台對於任何因約戰或線下見面引發之【人身安全、意外傷亡、財產損失】，概不承擔法律責任。
+                        本平台為「完全免費」之校園與公眾體育媒合空間。用家於此進行的所有行為皆屬個人自發社交。本平台對於任何因約戰或線下見面引發之【人身安全、意外傷亡、個人財產與社交糾紛】，概不承擔法律責任。
                     </p>
                     <label class="flex items-start space-x-2 pt-2 cursor-pointer">
                         <input type="checkbox" x-model="agreeToTerms" class="mt-0.5 rounded border-slate-700 text-emerald-500 focus:ring-emerald-500 bg-slate-800">
@@ -330,7 +330,7 @@
                                     :disabled="isClubMember(club)"
                                     :class="isClubMember(club) ? 'bg-slate-800 text-gray-500' : 'bg-blue-600 hover:bg-blue-500 text-white'"
                                     class="w-full text-xs font-bold py-2 rounded-lg transition-colors">
-                                <span x-text="isClubMember(club) ? '已成功加入球會' : '申請加入球會'"></span>
+                                <span x-text="isClubMember(club) ? '已成功加入球會' : '申請免費加入球會'"></span>
                             </button>
                         </div>
                     </template>
@@ -533,7 +533,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 👑 6. 系統總管理員控制台 (全面掌控區) -->
+    <!-- 👑 6. 系統總管理員控制台 -->
     <!-- ========================================== -->
     <div x-show="currentView === 'admin'" x-cloak class="min-h-screen flex flex-col bg-slate-950">
         <header class="bg-red-950/20 border-b border-red-900/30 px-6 py-4 flex items-center justify-between sticky top-0 z-50">
@@ -547,7 +547,6 @@
         </header>
 
         <div class="flex-1 max-w-6xl w-full mx-auto p-6 flex flex-col lg:flex-row gap-6 pb-12">
-            <!-- 後台導航標籤 -->
             <div class="w-full lg:w-52 flex lg:flex-col gap-2 shrink-0">
                 <button @click="adminTab = 'bookings'" :class="adminTab === 'bookings' ? 'bg-red-600 text-white' : 'bg-slate-900 text-gray-400 border border-slate-800'" class="w-full py-3 px-4 rounded-xl text-xs font-bold text-left flex items-center space-x-2">
                     <i class="fa-solid fa-database"></i> <span>全局預約審查</span>
@@ -566,7 +565,6 @@
                 </button>
             </div>
 
-            <!-- 後台內容面板 -->
             <div class="flex-1 bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl overflow-hidden min-h-[400px]">
                 <div class="flex items-center justify-between mb-4 border-b border-slate-800 pb-2">
                     <h3 class="text-sm font-bold text-gray-200" x-text="getAdminTabTitle()"></h3>
@@ -575,7 +573,7 @@
                     </button>
                 </div>
 
-                <!-- A. 管理員預約審查 (可修改人數) -->
+                <!-- A. 管理員預約審查 -->
                 <div x-show="adminTab === 'bookings'" class="overflow-x-auto">
                     <table class="w-full text-xs text-left border-collapse">
                         <thead>
@@ -603,12 +601,10 @@
                                         <span class="font-bold text-emerald-400" x-text="item.currentCount + '/' + item.maxCapacity + '人'"></span>
                                     </td>
                                     <td class="p-3 flex items-center space-x-2">
-                                        <!-- 修改人數按鈕 -->
                                         <button @click="adminModifyCapacity(item)" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-2 py-1 rounded text-[10px] flex items-center space-x-1">
                                             <i class="fa-solid fa-pen-to-square"></i>
                                             <span>修改人數</span>
                                         </button>
-                                        <!-- 監控對話按鈕 -->
                                         <button @click="openAdminChatRoom(item)" class="bg-red-600 hover:bg-red-500 text-white font-bold px-2 py-1 rounded text-[10px] flex items-center space-x-1">
                                             <i class="fa-solid fa-eye"></i>
                                             <span>監控對話</span>
@@ -620,7 +616,7 @@
                     </table>
                 </div>
 
-                <!-- B. 運動球會管理 (新增需求) -->
+                <!-- B. 運動球會管理 -->
                 <div x-show="adminTab === 'clubs'" class="overflow-x-auto space-y-4">
                     <table class="w-full text-xs text-left border-collapse">
                         <thead>
@@ -686,7 +682,7 @@
                     </template>
                 </div>
 
-                <!-- E. 管理員修改密碼 (新增需求) -->
+                <!-- E. 管理員修改密碼 -->
                 <div x-show="adminTab === 'settings'" class="max-w-md mx-auto space-y-4 pt-4">
                     <h4 class="text-sm font-bold text-red-400 border-b border-slate-800 pb-2">🔑 修改管理員中央控制台密碼</h4>
                     <div class="space-y-3 text-xs">
@@ -717,6 +713,36 @@
             <div class="flex space-x-2 text-xs">
                 <button @click="isShowingMatchModal = false" class="flex-1 bg-slate-800 hover:bg-slate-700 py-2 rounded-lg">取消</button>
                 <button @click="executeMatchAction()" class="flex-1 bg-blue-600 hover:bg-blue-500 py-2 rounded-lg font-bold text-white">確認加入局</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🚨 舉報 Modal -->
+    <div x-show="isShowingComplaintModal" x-cloak class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 w-full max-w-md rounded-2xl p-6 space-y-4">
+            <div class="flex items-center space-x-2 text-red-400 border-b border-slate-800 pb-2">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <h3 class="font-bold text-base">🚨 違規緊急舉報中心</h3>
+            </div>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block text-gray-400 font-semibold mb-1">🛡️ 違規舉報類型</label>
+                    <select x-model="complaintReason" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs bg-slate-800 text-white">
+                        <option value="對方未出席約定項目 (放飛機)">對方未出席約定項目 (放飛機)</option>
+                        <option value="溝通含有不道德言語 / 騷擾行為">溝通含有不道德言語 / 騷擾行為</option>
+                        <option value="涉及詐騙或不良行為懷疑">涉及詐騙或不良行為懷疑</option>
+                        <option value="其他違規行為">其他違規行為</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-400 font-semibold mb-1">📝 詳細具體事由說明</label>
+                    <textarea x-model="complaintDetails" rows="3" placeholder="請輸入投訴詳細內容..."
+                              class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white resize-none"></textarea>
+                </div>
+            </div>
+            <div class="flex space-x-2 pt-2 text-xs">
+                <button @click="isShowingComplaintModal = false" class="flex-1 bg-slate-800 hover:bg-slate-700 py-2 rounded-lg">取消</button>
+                <button @click="submitComplaintAction()" class="flex-1 bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-lg">確認送出</button>
             </div>
         </div>
     </div>
@@ -753,20 +779,20 @@
                 detectionText: '請輸入電郵，系統將自動分析域名...', detectedType: 'public', detectedInstitution: '無（公眾）',
                 currentUser: null,
                 sportsList: [
-                    { key: 'badminton', title: '羽毛球專區', icon: '🏸', bg: 'bg-gradient-to-br from-blue-600 to-indigo-700', btnBg: 'bg-blue-600 hover:bg-blue-500', info: '熱門大眾媒合 ｜ 免費約戰' },
+                    { key: 'badminton', title: '羽毛球專區', icon: '🏸', bg: 'bg-gradient-to-br from-blue-600 to-indigo-700', btnBg: 'bg-blue-600 hover:bg-blue-500', info: '熱門大眾媒合 ｜ 完全免費' },
                     { key: 'golf', title: '高爾夫球區', icon: '⛳', bg: 'bg-gradient-to-br from-emerald-600 to-teal-700', btnBg: 'bg-emerald-600 hover:bg-emerald-500', info: '揮桿約局 ｜ 完全免費' },
-                    { key: 'basketball', title: '熱血籃球區', icon: '🏀', bg: 'bg-gradient-to-br from-orange-500 to-amber-600', btnBg: 'bg-orange-500 hover:bg-orange-400', info: '全場鬥牛 ｜ 免費約戰' },
-                    { key: 'pickleball', title: '匹克球特區', icon: '🥎', bg: 'bg-gradient-to-br from-pink-600 to-rose-700', btnBg: 'bg-pink-600 hover:bg-pink-500', info: '新潮運動 ｜ 免費組隊' },
-                    { key: 'volleyball', title: '校園排球聯網', icon: '🏐', bg: 'bg-gradient-to-br from-purple-600 to-fuchsia-700', btnBg: 'bg-purple-600 hover:bg-purple-500', info: '團隊組局 ｜ 免費約戰' },
+                    { key: 'basketball', title: '熱血籃球區', icon: '🏀', bg: 'bg-gradient-to-br from-orange-500 to-amber-600', btnBg: 'bg-orange-500 hover:bg-orange-400', info: '全場鬥牛 ｜ 完全免費' },
+                    { key: 'pickleball', title: '匹克球特區', icon: '🥎', bg: 'bg-gradient-to-br from-pink-600 to-rose-700', btnBg: 'bg-pink-600 hover:bg-pink-500', info: '新潮運動 ｜ 完全免費' },
+                    { key: 'volleyball', title: '校園排球聯網', icon: '🏐', bg: 'bg-gradient-to-br from-purple-600 to-fuchsia-700', btnBg: 'bg-purple-600 hover:bg-purple-500', info: '團隊組局 ｜ 完全免費' },
                     { key: 'tableTennis', title: '乒乓球對戰區', icon: '🏓', bg: 'bg-gradient-to-br from-cyan-600 to-blue-700', btnBg: 'bg-cyan-600 hover:bg-cyan-500', info: '桌球對決 ｜ 完全免費' },
-                    { key: 'tennis', title: '挑戰精英網球場', icon: '🎾', bg: 'bg-gradient-to-br from-teal-600 to-emerald-700', btnBg: 'bg-teal-600 hover:bg-teal-500', info: '網球約局 ｜ 免費媒合' },
-                    { key: 'swimming', title: '大專游泳池', icon: '🏊', bg: 'bg-gradient-to-br from-indigo-600 to-blue-800', btnBg: 'bg-indigo-600 hover:bg-indigo-500', info: '泳友交流 ｜ 免費約局' }
+                    { key: 'tennis', title: '挑戰精英網球場', icon: '🎾', bg: 'bg-gradient-to-br from-teal-600 to-emerald-700', btnBg: 'bg-teal-600 hover:bg-teal-500', info: '網球約局 ｜ 完全免費' },
+                    { key: 'swimming', title: '大專游泳池', icon: '🏊', bg: 'bg-gradient-to-br from-indigo-600 to-blue-800', btnBg: 'bg-indigo-600 hover:bg-indigo-500', info: '泳友交流 ｜ 完全免費' }
                 ],
                 suggestionsList: [], newSportSuggestion: '',
                 activeSport: null, loungeBookings: [], bookDate: new Date().toISOString().split('T')[0], bookTime: '14:00 - 16:00', bookCapacity: 2,
                 matchedBookings: [], targetMatchingItem: null, isShowingMatchModal: false,
                 activeChatBooking: null, chatMessagesList: [], typeText: '', chatTimer: null,
-                isShowingComplaintModal: false, complaintReason: '對方放飛機 (未出席約定項目)', complaintDetails: '',
+                isShowingComplaintModal: false, complaintReason: '對方未出席約定項目 (放飛機)', complaintDetails: '',
                 adminBookings: [], adminMessages: [], adminComplaints: [], adminClubs: [],
                 adminNewPass: '', adminConfirmPass: '',
                 clubsList: [], newClubName: '', newClubSport: 'badminton', newClubDesc: '',
@@ -973,7 +999,7 @@
                     } catch(e) {}
                 },
 
-                // 👑 管理員專屬操作功能 (新增需求)
+                // 管理員操作
                 async adminModifyCapacity(item) {
                     let newCap = prompt(`請輸入 ${item.hostName} 約局的新人數上限:`, item.maxCapacity);
                     if(!newCap || isNaN(newCap) || Number(newCap) < 1) return;
