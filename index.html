@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大專運動聯網平台 - 網頁版</title>
+    <title>UniPlay 大專運動聯網平台</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -31,6 +31,20 @@
 </head>
 <body class="bg-slate-950 text-gray-100 min-h-screen font-sans antialiased selection:bg-emerald-500 selection:text-white" 
       x-data="appState()" x-init="initApp()">
+
+    <!-- Toast 系統全區消息提醒 -->
+    <div x-show="toast.show" x-cloak 
+         x-transition:enter="transition ease-out duration-300 transform"
+         x-transition:enter-start="opacity-0 -translate-y-4"
+         x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-200 transform"
+         x-transition:leave-start="opacity-100 translate-y-0"
+         x-transition:leave-end="opacity-0 -translate-y-4"
+         class="fixed top-5 left-1/2 -translate-x-1/2 z-50 px-4 py-2.5 rounded-xl shadow-2xl border text-xs font-bold flex items-center space-x-2"
+         :class="toast.type === 'error' ? 'bg-red-950/90 text-red-200 border-red-800' : 'bg-emerald-950/90 text-emerald-200 border-emerald-800'">
+        <i class="fa-solid" :class="toast.type === 'error' ? 'fa-circle-exclamation text-red-400' : 'fa-circle-check text-emerald-400'"></i>
+        <span x-text="toast.message"></span>
+    </div>
 
     <!-- ========================================== -->
     <!-- 🔑 1. 登入介面 (Login View) -->
@@ -752,21 +766,39 @@
     <!-- ========================================== -->
     <script>
         const Config = {
+            // 請替換為您在 Apps Script 部署獲得的 Exec 網址
             googleSheetsAPIURL: "https://script.google.com/macros/s/AKfycbyEZFlnMIru9gpcQlWwm533AuAkui7W5BvbcBr1LFez2pLJ1NlRWuKty-Hzz0F5PfEl9Q/exec"
         };
 
-        async function fetchFromGoogle(payload) {
-            let response = await fetch(Config.googleSheetsAPIURL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify(payload)
-            });
-            const rawText = await response.text();
+        // ⚡ 核心網絡通訊引擎：帶有 12秒逾時防護 與 HTML 響應攔截器
+        async function fetchFromGoogle(payload, timeoutMs = 12000) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), timeoutMs);
+
             try {
+                let response = await fetch(Config.googleSheetsAPIURL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify(payload),
+                    signal: controller.signal
+                });
+                clearTimeout(timer);
+
+                const rawText = await response.text();
+
+                // 攔截 Google 伺服器回傳 HTML 錯誤頁面（如 500、配額超限）
+                if (rawText.trim().startsWith('<')) {
+                    throw new Error("Google 雲端後端回應非預期 HTML 頁面，請確認 Apps Script 權限。");
+                }
+
                 return JSON.parse(rawText);
             } catch(err) {
-                console.error("🚨 後端崩潰原始訊息:\n", rawText);
-                throw new Error("後端連線異常");
+                clearTimeout(timer);
+                if (err.name === 'AbortError') {
+                    throw new Error("連線逾時，Google 試算表伺服器回應較慢，請重試。");
+                }
+                console.error("🚨 網路連線或解析失敗: ", err);
+                throw err;
             }
         }
 
@@ -778,6 +810,7 @@
                 loginEmail: '', loginPassword: '', regName: '', regEmail: '', regPassword: '', agreeToTerms: false,
                 detectionText: '請輸入電郵，系統將自動分析域名...', detectedType: 'public', detectedInstitution: '無（公眾）',
                 currentUser: null,
+                toast: { show: false, message: '', type: 'info' },
                 sportsList: [
                     { key: 'badminton', title: '羽毛球專區', icon: '🏸', bg: 'bg-gradient-to-br from-blue-600 to-indigo-700', btnBg: 'bg-blue-600 hover:bg-blue-500', info: '熱門大眾媒合 ｜ 完全免費' },
                     { key: 'golf', title: '高爾夫球區', icon: '⛳', bg: 'bg-gradient-to-br from-emerald-600 to-teal-700', btnBg: 'bg-emerald-600 hover:bg-emerald-500', info: '揮桿約局 ｜ 完全免費' },
@@ -799,6 +832,13 @@
                 newPassword: '', confirmPassword: '',
 
                 initApp() {},
+
+                showToast(msg, type = 'info') {
+                    this.toast.message = msg;
+                    this.toast.type = type;
+                    this.toast.show = true;
+                    setTimeout(() => { this.toast.show = false; }, 3000);
+                },
 
                 getSportIcon(key) {
                     const icons = {
@@ -837,8 +877,9 @@
                                 await this.fetchSuggestions();
                                 await this.loadMyMatchedBookings();
                             }
+                            this.showToast("歡迎回來，" + res.user.name, "success");
                         } else { this.errorMessage = res.message || '帳號或密碼錯誤'; }
-                    } catch(e) { this.errorMessage = '雲端連線失敗，請稍後再試。'; }
+                    } catch(e) { this.errorMessage = e.message || '雲端連線失敗，請稍後再試。'; }
                     this.isLoading = false;
                 },
 
@@ -850,10 +891,10 @@
                             type: this.detectedType, institution: this.detectedInstitution
                         });
                         if(res.success) {
-                            alert("🎉 註冊成功，帳號資料已安全同步至 Google 試算表！");
+                            this.showToast("🎉 註冊成功，請登入！", "success");
                             this.currentView = 'login';
                         } else { alert("🚨 註冊失敗: " + res.message); }
-                    } catch(e) { alert("連線超時。"); }
+                    } catch(e) { alert("連線超時或異常。"); }
                     this.isLoading = false;
                 },
 
@@ -863,6 +904,7 @@
                 },
 
                 async loadLoungeBookings() {
+                    if(!this.activeSport) return;
                     try {
                         let data = await fetchFromGoogle({ action: 'getBookings', sport: this.activeSport.key });
                         if(data.success) { this.loungeBookings = data.items || []; }
@@ -870,21 +912,23 @@
                 },
 
                 async createBookingAction() {
+                    if(!this.currentUser || !this.activeSport) return;
                     try {
                         let res = await fetchFromGoogle({
                             action: 'createBooking', hostEmail: this.currentUser.fieldName, hostName: this.currentUser.name,
                             sportType: this.activeSport.key, date: this.bookDate, timeSlot: this.bookTime, maxCapacity: this.bookCapacity
                         });
                         if(res.success) {
-                            alert("🎉 約戰局發布成功！已成功設定人數上限。");
+                            this.showToast("🎉 約戰局發布成功！", "success");
                             await this.loadLoungeBookings();
                         }
-                    } catch(e) {}
+                    } catch(e) { this.showToast("發布失敗，請再試一次", "error"); }
                 },
 
                 confirmMatchTrigger(item) { this.targetMatchingItem = item; this.isShowingMatchModal = true; },
 
                 async executeMatchAction() {
+                    if(!this.targetMatchingItem || !this.currentUser) return;
                     this.isShowingMatchModal = false;
                     try {
                         let res = await fetchFromGoogle({
@@ -892,7 +936,7 @@
                             guestEmail: this.currentUser.fieldName, guestName: this.currentUser.name
                         });
                         if(res.success) {
-                            alert("🎉 成功加入約戰局！已轉移至「我的預約」分頁進行溝通。");
+                            this.showToast("🎉 成功加入約戰局！", "success");
                             this.currentView = 'main'; this.currentTab = 'myBookings';
                             await this.loadMyMatchedBookings();
                         } else { alert(res.message || "加入失敗"); }
@@ -911,6 +955,7 @@
                     this.activeChatBooking = booking; 
                     this.currentView = 'chat'; 
                     await this.syncMessages();
+                    if(this.chatTimer) clearInterval(this.chatTimer);
                     this.chatTimer = setInterval(() => { this.syncMessages(); }, 3000);
                 },
 
@@ -918,9 +963,8 @@
                     this.activeChatBooking = booking;
                     this.currentView = 'chat';
                     await this.syncMessages();
-                    if(!this.chatTimer) {
-                        this.chatTimer = setInterval(() => { this.syncMessages(); }, 3000);
-                    }
+                    if(this.chatTimer) clearInterval(this.chatTimer);
+                    this.chatTimer = setInterval(() => { this.syncMessages(); }, 3000);
                 },
 
                 closeChatRoom() {
@@ -949,7 +993,7 @@
                 isMyMessage(msg) { return this.currentUser ? msg.senderEmail.toLowerCase() === this.currentUser.fieldName.toLowerCase() : false; },
 
                 async sendMessageAction() {
-                    let txt = this.typeText.trim(); if(!txt) return;
+                    let txt = this.typeText.trim(); if(!txt || !this.currentUser || !this.activeChatBooking) return;
                     try {
                         await fetchFromGoogle({
                             action: 'sendMessage', bookingId: this.activeChatBooking._id,
@@ -959,7 +1003,6 @@
                     } catch(e) {}
                 },
 
-                // 運動球會 / 公會系統
                 async loadClubsData() {
                     try {
                         let data = await fetchFromGoogle({ action: 'getClubs' });
@@ -968,14 +1011,14 @@
                 },
 
                 async createClubAction() {
-                    if(!this.newClubName.trim()) { alert("請輸入球會名稱"); return; }
+                    if(!this.newClubName.trim() || !this.currentUser) { alert("請填寫球會名稱"); return; }
                     try {
                         let res = await fetchFromGoogle({
                             action: 'createClub', name: this.newClubName, sportType: this.newClubSport,
                             description: this.newClubDesc, leaderEmail: this.currentUser.fieldName, leaderName: this.currentUser.name
                         });
                         if(res.success) {
-                            alert("🎉 成功創立球會！");
+                            this.showToast("🎉 成功創立球會！", "success");
                             this.newClubName = ''; this.newClubDesc = '';
                             await this.loadClubsData();
                         }
@@ -988,25 +1031,25 @@
                 },
 
                 async joinClubAction(club) {
+                    if(!this.currentUser) return;
                     try {
                         let res = await fetchFromGoogle({
                             action: 'joinClub', clubId: club._id, userEmail: this.currentUser.fieldName, userName: this.currentUser.name
                         });
                         if(res.success) {
-                            alert("🎉 成功加入球會社群！");
+                            this.showToast("🎉 成功加入球會！", "success");
                             await this.loadClubsData();
                         }
                     } catch(e) {}
                 },
 
-                // 管理員操作
                 async adminModifyCapacity(item) {
                     let newCap = prompt(`請輸入 ${item.hostName} 約局的新人數上限:`, item.maxCapacity);
                     if(!newCap || isNaN(newCap) || Number(newCap) < 1) return;
                     try {
                         let res = await fetchFromGoogle({ action: 'adminUpdateBookingCapacity', bookingId: item._id, newCapacity: Number(newCap) });
                         if(res.success) {
-                            alert("🎉 人數上限已成功更新！");
+                            this.showToast("🎉 人數上限已更新！", "success");
                             await this.loadAdminDataPackage();
                         }
                     } catch(e) { alert("更新失敗"); }
@@ -1024,7 +1067,7 @@
                             leaderEmail: club.leaderEmail, leaderName: leaderName
                         });
                         if(res.success) {
-                            alert("🎉 球會資料已更新！");
+                            this.showToast("🎉 球會資料已更新！", "success");
                             await this.loadAdminDataPackage();
                         }
                     } catch(e) { alert("修改失敗"); }
@@ -1035,7 +1078,7 @@
                     try {
                         let res = await fetchFromGoogle({ action: 'adminDeleteClub', clubId: club._id });
                         if(res.success) {
-                            alert("🗑️ 球會已強制刪除！");
+                            this.showToast("🗑️ 球會已刪除！", "info");
                             await this.loadAdminDataPackage();
                         }
                     } catch(e) { alert("刪除失敗"); }
@@ -1048,13 +1091,14 @@
                     try {
                         let res = await fetchFromGoogle({ action: 'adminUpdatePassword', newPassword: this.adminNewPass });
                         if(res.success) {
-                            alert("🎉 管理員密碼已同步更新成功！下次登入請使用新密碼。");
+                            this.showToast("🎉 管理員密碼更新成功！", "success");
                             this.adminNewPass = ''; this.adminConfirmPass = '';
                         }
                     } catch(e) { alert("修改密碼失敗"); }
                 },
 
                 async submitComplaintAction() {
+                    if(!this.currentUser) return;
                     try {
                         let res = await fetchFromGoogle({
                             action: 'sendComplaint', bookingId: this.activeChatBooking ? this.activeChatBooking._id : 'N/A',
@@ -1062,7 +1106,7 @@
                         });
                         if(res.success) {
                             this.isShowingComplaintModal = false; this.complaintDetails = '';
-                            alert("舉報處理完成！已即時同步寫入 Google 試算表。");
+                            this.showToast("舉報已送出並通知管理員", "success");
                         }
                     } catch(e) {}
                 },
@@ -1074,13 +1118,27 @@
                     } catch(e) {}
                 },
 
+                async submitSuggestionAction() {
+                    let txt = this.newSportSuggestion.trim(); if(!txt) return;
+                    this.isSubmitting = true;
+                    try {
+                        let res = await fetchFromGoogle({ action: 'suggestSport', sportName: txt });
+                        if(res.success) {
+                            this.newSportSuggestion = '';
+                            await this.fetchSuggestions();
+                            this.showToast("感謝您的運動提議！", "success");
+                        }
+                    } catch(e) {}
+                    this.isSubmitting = false;
+                },
+
                 async updatePasswordAction() {
-                    if(!this.newPassword || this.newPassword !== this.confirmPassword) { alert("⚠️ 密碼不一致！"); return; }
+                    if(!this.newPassword || this.newPassword !== this.confirmPassword || !this.currentUser) { alert("⚠️ 密碼不一致！"); return; }
                     try {
                         let res = await fetchFromGoogle({ action: 'updatePassword', email: this.currentUser.fieldName, newPassword: this.newPassword });
                         if(res.success) {
                             this.currentUser.password = this.newPassword; this.newPassword = ''; this.confirmPassword = '';
-                            alert("🎉 密碼已同步變更！");
+                            this.showToast("🎉 密碼已成功變更！", "success");
                         }
                     } catch(e) {}
                 },
