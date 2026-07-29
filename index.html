@@ -770,37 +770,37 @@
             googleSheetsAPIURL: "https://script.google.com/macros/s/AKfycbyEZFlnMIru9gpcQlWwm533AuAkui7W5BvbcBr1LFez2pLJ1NlRWuKty-Hzz0F5PfEl9Q/exec"
         };
 
-        // ⚡ 核心網絡通訊引擎：帶有 12秒逾時防護 與 HTML 響應攔截器
-        async function fetchFromGoogle(payload, timeoutMs = 12000) {
-            const controller = new AbortController();
-            const timer = setTimeout(() => controller.abort(), timeoutMs);
+        // ⚡ 核心網絡通訊引擎：將逾時延長至 30 秒，完美容忍 Google 試算表冷啟動
+async function fetchFromGoogle(payload, timeoutMs = 30000) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
 
-            try {
-                let response = await fetch(Config.googleSheetsAPIURL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: JSON.stringify(payload),
-                    signal: controller.signal
-                });
-                clearTimeout(timer);
+    try {
+        let response = await fetch(Config.googleSheetsAPIURL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: JSON.stringify(payload),
+            signal: controller.signal
+        });
+        clearTimeout(timer);
 
-                const rawText = await response.text();
+        const rawText = await response.text();
 
-                // 攔截 Google 伺服器回傳 HTML 錯誤頁面（如 500、配額超限）
-                if (rawText.trim().startsWith('<')) {
-                    throw new Error("Google 雲端後端回應非預期 HTML 頁面，請確認 Apps Script 權限。");
-                }
-
-                return JSON.parse(rawText);
-            } catch(err) {
-                clearTimeout(timer);
-                if (err.name === 'AbortError') {
-                    throw new Error("連線逾時，Google 試算表伺服器回應較慢，請重試。");
-                }
-                console.error("🚨 網路連線或解析失敗: ", err);
-                throw err;
-            }
+        // 攔截 Google 伺服器回傳 HTML 錯誤頁面（如權限設定錯誤或配額超限）
+        if (rawText.trim().startsWith('<')) {
+            throw new Error("Google 雲端權限未開啟，請確保 Apps Script 存取權限已設為『所有人』。");
         }
+
+        return JSON.parse(rawText);
+    } catch(err) {
+        clearTimeout(timer);
+        if (err.name === 'AbortError') {
+            throw new Error("雲端喚醒逾時，Google 正在冷啟動中，請再次點擊登入即可！");
+        }
+        console.error("🚨 網路連線或解析失敗: ", err);
+        throw err;
+    }
+}
 
         function appState() {
             return {
